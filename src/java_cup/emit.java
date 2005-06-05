@@ -580,11 +580,11 @@ public class emit {
 	    row.default_reduce = -1;
 
 	  /* make temporary table for the row. */
-	  short[] temp_table = new short[2*row.size()];
+	  short[] temp_table = new short[2*parse_action_row.size()];
 	  int nentries = 0;
 
 	  /* do each column */
-	  for (int j = 0; j < row.size(); j++)
+	  for (int j = 0; j < parse_action_row.size(); j++)
 	    {
 	      /* extract the action from the table */
 	      act = row.under_term[j];
@@ -673,10 +673,10 @@ public class emit {
       for (int i=0; i<red_tab.num_states(); i++)
 	{
 	  /* make temporary table for the row. */
-	  short[] temp_table = new short[2*red_tab.under_state[i].size()];
+	  short[] temp_table = new short[2*parse_reduce_row.size()];
 	  int nentries = 0;
 	  /* do each entry in the row */
-	  for (int j=0; j<red_tab.under_state[i].size(); j++)
+	  for (int j=0; j<parse_reduce_row.size(); j++)
 	    {
 	      /* get the entry */
 	      goto_st = red_tab.under_state[i].under_non_term[j];
