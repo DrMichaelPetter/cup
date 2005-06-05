@@ -84,6 +84,13 @@ public class terminal extends symbol {
    */
   protected static Hashtable _all = new Hashtable();
 
+  //Hm Added clear  to clear all static fields
+  public static void clear() {
+      _all.clear();
+      _all_by_index.clear();
+      next_index=0;
+  }
+  
   /** Access to all terminals. */
   public static Enumeration all() {return _all.elements();}
 

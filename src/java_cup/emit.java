@@ -210,6 +210,24 @@ public class emit {
   public static boolean lr_values() {return _lr_values;}
   protected static void set_lr_values(boolean b) { _lr_values = b;}
 
+  //Hm Added clear  to clear all static fields
+  public static void clear () {
+      _lr_values = true;
+      action_code = null;
+      import_list = new Stack();
+      init_code = null;
+      not_reduced = 0;
+      num_conflicts = 0;
+      package_name = null;
+      parser_class_name = "parser";
+      parser_code = null;
+      scan_code = null;
+      start_production = null;
+      symbol_const_class_name = "sym";
+      unused_non_term = 0;
+      unused_term = 0;
+  }
+
   /*-----------------------------------------------------------*/
   /*--- General Methods ---------------------------------------*/
   /*-----------------------------------------------------------*/

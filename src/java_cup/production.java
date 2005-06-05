@@ -230,6 +230,12 @@ public class production {
     return (production) _all.get(new Integer(indx));
   }
 
+  //Hm Added clear  to clear all static fields
+  public static void clear() {
+      _all.clear();
+      next_index=0;
+  }
+  
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
  
   /** Total number of productions. */

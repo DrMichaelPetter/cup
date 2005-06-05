@@ -6,7 +6,7 @@ Nothing else has changed since the last bugfix release, as indicated in
 the version date.
 
 M. Petter
-Technical University Munich
+Technische Universität München
 2005/05/16
 ------------------------------------------------------------------------
 CUP version 0.10k TUM Edition 20050516 is a bugfix release.
@@ -16,7 +16,7 @@ leading to wildcards like ArrayList<? extends MyClass> being
 destroyed. Meanwhile, everything should work as it is supposed to.
 
 M. Petter
-Technical University Munich
+Technische Universität München
 2005/05/16
 ------------------------------------------------------------------------
 CUP version 0.10k TUM Edition 20050514 is a bugfix/enhancement release.
@@ -27,7 +27,7 @@ even better error informations like column/line and the token in plain text,
 CUP is processing, when the error occurs.
 
 M. Petter
-Technical University Munich
+Technische Universität München
 2005/05/14
 ------------------------------------------------------------------------
 CUP version 0.10k TUM Edition 20050510 is a feature release.
@@ -44,7 +44,7 @@ The CUP frontend, which parses .cup-files has changed to a JFlex-generated
 scanner, which allows an easier maintainance.
 
 M. Petter
-Technical University Munich
+Technische Universität München
 2005/05/10
 ------------------------------------------------------------------------
 CUP version 0.10k is a maintenance release.
