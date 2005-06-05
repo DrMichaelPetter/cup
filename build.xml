@@ -1,0 +1,80 @@
+<project name="emugen" default ="dist" basedir=".">
+  <property name="etc"       location="etc"       />
+  <property name="bin"       location="bin"       />
+  <property name="lib"       location="lib"       />
+  <property name="src"       location="src"       />
+  <property name="java"      location="java"      />
+  <property name="classes"   location="classes"   />
+  <property name="dist"      location="dist"      />
+  <!--property name="test"      location="test"      /-->
+  <property name="flex"      location="flex"      />
+  <property name="cup"       location="cup"       />
+
+  <!-- initialize the workspace -->
+  <target name="init">
+    <tstamp />
+    <mkdir dir="${src}" />
+    <mkdir dir="${java}" />
+    <mkdir dir="${classes}" />
+    <mkdir dir="${dist}" />    
+  </target>
+  <property environment="env" />
+      <path id="libraries">
+        <pathelement location="${lib}" />
+        <fileset dir="${lib}">
+	  <include name="**/*.jar" />
+          <include name="**/*.zip" />
+	</fileset>
+        <pathelement path="${java.class.path}" />
+	<pathelement path="${env.ANT_HOME}/lib/ant.jar" />
+      </path>
+
+      <path id="binaries">
+        <pathelement location="${bin}" />
+        <fileset dir="${bin}">
+	  <include name="**/*.jar" />
+          <include name="**/*.zip" />
+	</fileset>
+        <pathelement path="${java.class.path}" />
+      </path>
+
+  <!-- deletes all build-related directories -->
+  <target name="clean">
+    <!--delete>
+      <fileset dir="${src}" excludes="**/*.java" />
+    </delete-->
+    <delete dir="${java}" />
+    <delete dir="${classes}" />
+    <delete dir="${dist}" />
+  </target>
+
+  <taskdef name="cup" classname="java_cup.anttask.CUPTask" classpathref="binaries" />
+  <taskdef name="jflex" classname="JFlex.anttask.JFlexTask" classpathref="binaries" />
+
+  <target name="cup" depends="init">
+    <cup srcfile="${cup}/parser.cup" interface="on" destdir="${java}" parser="parser" symbols="sym" quiet="false" nonterms="true"/>
+  </target>
+
+  <target name="jflex" depends="cup">
+    <jflex file="${flex}/Lexer.jflex" destdir="${java}" />
+  </target>
+
+  <target name="compile" depends="jflex">
+    <copy todir="${java}"><fileset dir="${src}"></fileset></copy>
+    <javac srcdir="${java}" destdir="${classes}" verbose="off" listfiles="off" debug="on">
+      <!--compilerarg value="-Xlint:unchecked" /-->
+      <classpath refid="libraries"/>
+    </javac>
+  </target>
+
+  <target name="dist" depends="compile">
+   <jar jarfile="${dist}/java-cup-10k-TUM.jar" basedir="${classes}">
+      <manifest>
+        <attribute name="Main-Class" value="java_cup/Main" />
+	<attribute name="Class-Path" value="java-cup-10k-TUM-runtime-jar" />
+      </manifest>
+    </jar>
+    <jar jarfile="${dist}/java-cup-10k-TUM-runtime.jar" basedir="${classes}" excludes="java_cup/*">
+    </jar>
+  </target>
+</project>
