@@ -198,8 +198,8 @@ parser code {:
     Object   info)
     {
       done_parsing();
-      if (info instanceof Symbol) ErrorManager.getManager().emit_error(message+ "\nCan't recover from previous error(s), giving up.",(Symbol)info);
-      else ErrorManager.getManager().emit_error(message + "\nCan't recover from previous error(s), giving up.",cur_token);
+      if (info instanceof Symbol) ErrorManager.getManager().emit_fatal(message+ "\nCan't recover from previous error(s), giving up.",(Symbol)info);
+      else ErrorManager.getManager().emit_fatal(message + "\nCan't recover from previous error(s), giving up.",cur_token);
       System.exit(1);
     }
 
@@ -331,7 +331,7 @@ action_code_part ::=
 	ACTION CODE CODE_STRING:user_code opt_semi
 	{:
 	  if (emit.action_code!=null)
-	    ErrorManager.getManager().emit_error("Redundant action code (skipping)");
+	    ErrorManager.getManager().emit_warning("Redundant action code (skipping)");
 	  else /* save the user included code string */
 	    emit.action_code = user_code;
 	:}
@@ -343,7 +343,7 @@ parser_code_part ::=
 	PARSER CODE CODE_STRING:user_code opt_semi
 	{:
 	  if (emit.parser_code!=null)
-	    ErrorManager.getManager().emit_error("Redundant parser code (skipping)");
+	    ErrorManager.getManager().emit_warning("Redundant parser code (skipping)");
 	  else /* save the user included code string */
 	    emit.parser_code = user_code;
 	:}
@@ -355,7 +355,7 @@ init_code ::=
 	INIT WITH CODE_STRING:user_code opt_semi
 	{: 
 	  if (emit.init_code!=null)
-	    ErrorManager.getManager().emit_error("Redundant init code (skipping)");
+	    ErrorManager.getManager().emit_warning("Redundant init code (skipping)");
 	  else /* save the user code */
 	    emit.init_code = user_code;
 	:}
@@ -367,7 +367,7 @@ scan_code ::=
 	SCAN WITH CODE_STRING:user_code opt_semi
 	{: 
 	  if (emit.scan_code!=null)
-	    ErrorManager.getManager().emit_error("Redundant scan code (skipping)");
+	    ErrorManager.getManager().emit_warning("Redundant scan code (skipping)");
 	  else /* save the user code */
 	    emit.scan_code = user_code;
 	:}
@@ -555,7 +555,7 @@ production ::=
 	  if (lhs_nt == null)
 	    {
 	      if (ErrorManager.getManager().getErrorCount() == 0)
-	      ErrorManager.getManager().emit_error("LHS non terminal \"" + lhs_id + 
+	      ErrorManager.getManager().emit_warning("LHS non terminal \"" + lhs_id + 
 			       "\" has not been declared");
 	    }
 
