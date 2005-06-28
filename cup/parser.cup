@@ -91,7 +91,7 @@
 package java_cup;
 import java_cup.runtime.*;
 import java.util.Hashtable;
-
+import java.util.Stack;
 /*----------------------------------------------------------------*/ 
 
 action code {:
@@ -131,7 +131,7 @@ action code {:
 
   /** string to build up multiple part names */
   protected String multipart_name = new String();
-  protected String TUM_temp;
+  protected Stack multipart_names = new Stack();
   /** append a new name segment to the accumulated multipart name */
 
 //  TUM CHANGES
@@ -713,10 +713,10 @@ multipart_id ::=
 	multipart_id DOT robust_id:another_id
 	{: multipart_name = multipart_name.concat("."+another_id); :}
 	|multipart_id 
-        {: TUM_temp = multipart_name; multipart_name="";:}
+        {: multipart_names.push(multipart_name); multipart_name="";:}
         LT typearglist:types GT
          {: multipart_name =
-                        TUM_temp.concat("<"+types+">"); :}   
+         ((String)multipart_names.pop()).concat("<"+types+">"); :}
         |
 	robust_id:an_id
 	{: multipart_name = multipart_name.concat(an_id); :}

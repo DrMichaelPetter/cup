@@ -242,6 +242,7 @@ public class Main {
 "  Legal options include:\n" +
 "    -package name  specify package generated classes go in [default none]\n" +
 "    -parser name   specify parser class name [default \"parser\"]\n" +
+"    -typearg args  specify type arguments for parser class\n" + 
 "    -symbols name  specify name for symbol constant class [default \"sym\"]\n"+
 "    -interface     put symbols in an interface, rather than a class\n" +
 "    -nonterms      put non terminals in symbol constant class\n" + 
@@ -347,6 +348,16 @@ public class Main {
 	      System.out.println(version.title_str);
 	      System.exit(1);
 	  }
+      /* TUM changes; suggested by Henning Niss 20050628*/
+ 	  else if (argv[i].equals("-typearg")){
+ 	      if (++i >= len || argv[i].startsWith("-") || 
+              argv[i].endsWith(".cup")) 
+              usage("-symbols must have a name argument");
+          
+ 	      /* record the typearg */
+ 	      emit.class_type_argument = argv[i];
+      }
+
 	  /* CSA 24-Jul-1999; suggestion by Jean Vaucher */
 	  else if (!argv[i].startsWith("-") && i==len-1) {
 	      /* use input from file. */

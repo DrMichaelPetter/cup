@@ -1,3 +1,13 @@
+CUP version 0.11a beta 20050628 is a combined bugfix/feature release.
+
+Henning Niss ( hniss at itu dot dk ) sent me a patch to improve the
+generics handling in CUP. It also introduces a new parameter 
+"-typeargs" to cup, whith which one can parametrize the generated parser.
+
+M. Petter
+Technische Universität München
+2005/06/28
+------------------------------------------------------------------------
 CUP version 0.11a beta 20050516 is a management release.
 
 To indicate, that the CUP project switches from the Princeton team to the

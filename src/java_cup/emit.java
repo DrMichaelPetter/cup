@@ -128,6 +128,11 @@ public class emit {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
+ /** TUM changes; proposed by Henning Niss 20050628: Type arguments for class declaration */
+  public static String class_type_argument = null;
+
+  /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
+
   /** User declarations for direct inclusion in user action class. */
   public static String action_code = null;
 
@@ -239,6 +244,15 @@ public class emit {
     return prefix + parser_class_name + "$" + str;
   }
 
+   /**
+    * TUM changes; proposed by Henning Niss 20050628 
+    * Build a string with the specified type arguments,
+    * if present, otherwise an empty string.
+    */
+   protected static String typeArgument() {
+     return class_type_argument == null ? "" : "<" + class_type_argument + ">";
+   }
+
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
   /** Emit a package spec if the user wants one. 
@@ -343,8 +357,8 @@ public class emit {
       out.println(
        "/** Cup generated class to encapsulate user supplied action code.*/"
       );  
-      out.println("class " +  pre("actions") + " {");
-
+      /* TUM changes; proposed by Henning Niss 20050628: added type arguement */
+      out.println("class " +  pre("actions") + typeArgument() + " {");
       /* user supplied code */
       if (action_code != null)
 	{
@@ -353,12 +367,14 @@ public class emit {
 	}
 
       /* field for parser object */
-      out.println("  private final "+parser_class_name+" parser;");
+      /* TUM changes; proposed by Henning Niss 20050628: added typeArgument */
+      out.println("  private final "+parser_class_name + typeArgument() + " parser;");
 
       /* constructor */
       out.println();
       out.println("  /** Constructor */");
-      out.println("  " + pre("actions") + "("+parser_class_name+" parser) {");
+      /* TUM changes; proposed by Henning Niss 20050628: added typeArgument */
+      out.println("  " + pre("actions") + "("+parser_class_name+typeArgument()+" parser) {");
       out.println("    this.parser = parser;");
       out.println("  }");
 
@@ -808,7 +824,8 @@ public class emit {
       out.println("/** "+version.title_str+" generated parser.");
       out.println("  * @version " + new Date());
       out.println("  */");
-      out.println("public class " + parser_class_name + 
+      /* TUM changes; proposed by Henning Niss 20050628: added typeArgument */
+      out.println("public class " + parser_class_name + typeArgument() +
 		  " extends java_cup.runtime.lr_parser {");
 
       /* constructors [CSA/davidm, 24-jul-99] */
@@ -836,7 +853,8 @@ public class emit {
       out.println("  /** Action encapsulation object initializer. */");
       out.println("  protected void init_actions()");
       out.println("    {");
-      out.println("      action_obj = new " + pre("actions") + "(this);");
+      /* TUM changes; proposed by Henning Niss 20050628: added typeArgument */
+      out.println("      action_obj = new " + pre("actions") + typeArgument() +"(this);");
       out.println("    }");
       out.println();
 
