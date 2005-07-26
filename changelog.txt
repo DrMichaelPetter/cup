@@ -44,7 +44,10 @@ CUP version 0.10k TUM Edition 20050510 is a feature release.
 
 CUP now supports generic parametrisation of datatypes for CUP terminals
 and non terminals, as provided by Java 1.5. We do hope, it works correctly
-all flavours of Java generics, as for example wildcards.
+all flavours of Java generics, as for example wildcards. 
+! Be carefull ! : there are the new keywords "super" and "extends", which
+had to be introduced to support generic types. Watch out for identifiers in
+Your CUP files, that have these names.
 
 There is now an ANT Task for CUP, namely java_cup.anttask.CUPTask. It will
 soon be added to the documentation - for the moment, You can look into the
