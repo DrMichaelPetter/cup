@@ -77,4 +77,10 @@
     <jar jarfile="${dist}/java-cup-10k-TUM-runtime.jar" basedir="${classes}" excludes="java_cup/*">
     </jar>
   </target>
+
+  <target name="test" depends="dist">
+    <java jar="${dist}/java-cup-10k-TUM.jar" fork="true">
+        <arg value="${cup}/parser.cup" />
+    </java>  
+  </target>
 </project>

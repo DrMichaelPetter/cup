@@ -439,12 +439,16 @@ public class emit {
 	    out.println("              " + "// propagate RESULT from " +
 			s.name());
 	    out.println("              " + "if ( " +
-	      "((java_cup.runtime.Symbol) " + emit.pre("stack") + ".elementAt("
-              + emit.pre("top") + "-" + index + ")).value != null )");
+	      "((java_cup.runtime.Symbol) " + emit.pre("stack") + 
+			// TUM 20050917
+			((index==0)?".peek()":(".elementAt(" + emit.pre("top") + "-" + index + ")"))+
+			").value != null )");
 	    out.println("                " + "RESULT = " +
 	      "(" + prod.lhs().the_symbol().stack_type() + ") " +
-	      "((java_cup.runtime.Symbol) " + emit.pre("stack") + ".elementAt("
-              + emit.pre("top") + "-" + index + ")).value;");
+	      "((java_cup.runtime.Symbol) " + emit.pre("stack") + 
+			// TUM 20050917
+			((index==0)?".peek()":(".elementAt(" + emit.pre("top") + "-" + index + ")"))+
+			").value;");
 	  }
 
         /* if there is an action string, emit it */
@@ -461,15 +465,21 @@ public class emit {
 	  if (emit.lr_values()) {	    
 	    int loffset;
 	    String leftstring, rightstring;
-	    int roffset = 0;
-	    rightstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") + ".elementAt(" + 
-	      emit.pre("top") + "-" + roffset + ")).right";	  
+	    // TUM 20050917
+            //int roffset = 0;
+	    rightstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") + 
+		// TUM 20050917
+		//".elementAt(" + emit.pre("top") + "-" + roffset + "))"+
+		".peek()"+
+		").right";	  
 	    if (prod.rhs_length() == 0) 
 	      leftstring = rightstring;
 	    else {
 	      loffset = prod.rhs_length() - 1;
-	      leftstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") + ".elementAt(" + 
-		emit.pre("top") + "-" + loffset + ")).left";	  
+	      leftstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") + 
+		  // TUM 20050917
+		  ((loffset==0)?(".peek()"):(".elementAt(" + emit.pre("top") + "-" + loffset + ")")) +
+		  ").left";	  
 	    }
 	    out.println("              " + pre("result") + " = new java_cup.runtime.Symbol(" + 
 			prod.lhs().the_symbol().index() + "/*" +
