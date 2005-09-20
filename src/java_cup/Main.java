@@ -241,6 +241,7 @@ public class Main {
 "  and expects a specification file on standard input if no filename is given.\n" +
 "  Legal options include:\n" +
 "    -package name  specify package generated classes go in [default none]\n" +
+"    -destdir name  specify the destination directory, to store the generated files in\n" +
 "    -parser name   specify parser class name [default \"parser\"]\n" +
 "    -typearg args  specify type arguments for parser class\n" + 
 "    -symbols name  specify name for symbol constant class [default \"sym\"]\n"+
@@ -287,6 +288,16 @@ public class Main {
 
 	      /* record the name */
 	      emit.package_name = argv[i];
+	    }
+	  else if (argv[i].equals("-destdir"))
+	    {
+	      /* must have an arg */
+	      if (++i >= len || argv[i].startsWith("-") || 
+				argv[i].endsWith(".cup")) 
+		usage("-destdir must have a name argument");
+
+	      /* record the name */
+	      Main.dest_dir = new java.io.File(argv[i]);
 	    }
 	  else if (argv[i].equals("-parser"))
 	    {
@@ -389,6 +400,8 @@ public class Main {
   /** Output file for the symbol constant class. */
   protected static PrintWriter symbol_class_file;
 
+  /** Output directory. */
+  protected static File dest_dir = null;
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
   /** Open various files used by the system. */
@@ -401,7 +414,7 @@ public class Main {
 
       /* parser class */
       out_name = emit.parser_class_name + ".java";
-      fil = new File(out_name);
+      fil = new File(dest_dir,out_name);
       try {
         parser_class_file = new PrintWriter(
 		 new BufferedOutputStream(new FileOutputStream(fil), 4096));
@@ -412,7 +425,7 @@ public class Main {
 
       /* symbol constants class */
       out_name = emit.symbol_const_class_name + ".java";
-      fil = new File(out_name);
+      fil = new File(dest_dir,out_name);
       try {
         symbol_class_file = new PrintWriter(
 		 new BufferedOutputStream(new FileOutputStream(fil), 4096));

@@ -68,18 +68,18 @@
   </target>
 
   <target name="dist" depends="compile">
-   <jar jarfile="${dist}/java-cup-10k-TUM.jar" basedir="${classes}">
+   <jar jarfile="${dist}/java-cup-11.jar" basedir="${classes}">
       <manifest>
         <attribute name="Main-Class" value="java_cup/Main" />
-	<attribute name="Class-Path" value="java-cup-10k-TUM-runtime-jar" />
+	<attribute name="Class-Path" value="java-cup-11-runtime.jar" />
       </manifest>
     </jar>
-    <jar jarfile="${dist}/java-cup-10k-TUM-runtime.jar" basedir="${classes}" excludes="java_cup/*">
+    <jar jarfile="${dist}/java-cup-11-runtime.jar" basedir="${classes}" excludes="java_cup/*">
     </jar>
   </target>
 
   <target name="test" depends="dist">
-    <java jar="${dist}/java-cup-10k-TUM.jar" fork="true">
+    <java jar="${dist}/java-cup-11.jar" fork="true">
         <arg value="${cup}/parser.cup" />
     </java>  
   </target>
