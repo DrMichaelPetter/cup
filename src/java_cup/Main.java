@@ -295,7 +295,6 @@ public class Main {
 	      if (++i >= len || argv[i].startsWith("-") || 
 				argv[i].endsWith(".cup")) 
 		usage("-destdir must have a name argument");
-
 	      /* record the name */
 	      Main.dest_dir = new java.io.File(argv[i]);
 	    }

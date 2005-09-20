@@ -1,3 +1,15 @@
+------------------------------------------------------------------------
+CUP version 0.11a beta 20050920 is a combined bugfix/feature release.
+
+Made use of .peek() function for Stacks in generated parsers.
+-destdir parameter added for generation in Makefiles or with ant. 
+Completely rewrote the CUP-anttask to properly call ant even, if You use 
+paths including whitespaces.
+
+M. Petter
+Technische Universität München
+2005/06/28
+------------------------------------------------------------------------
 CUP version 0.11a beta 20050628 is a combined bugfix/feature release.
 
 Henning Niss ( hniss at itu dot dk ) sent me a patch to improve the
