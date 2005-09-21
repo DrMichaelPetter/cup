@@ -155,6 +155,14 @@ public class Main {
       boolean did_output = false;
 
       start_time = System.currentTimeMillis();
+      
+      /** clean all static members, that contain remaining stuff from earlier calls */
+      terminal.clear();
+      production.clear();
+      non_terminal.clear();
+      parse_reduce_row.clear();
+      parse_action_row.clear();
+      lalr_state.clear();
 
       /* process user options and arguments */
       parse_args(argv);
