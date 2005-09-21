@@ -159,6 +159,8 @@ public class Main {
       /** clean all static members, that contain remaining stuff from earlier calls */
       terminal.clear();
       production.clear();
+      action_production.clear();
+      emit.clear();
       non_terminal.clear();
       parse_reduce_row.clear();
       parse_action_row.clear();

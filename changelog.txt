@@ -1,4 +1,14 @@
 ------------------------------------------------------------------------
+CUP version 0.11a beta 20050921 is a combined bugfix release.
+
+added calls to clear the content of static fields in CUP, to be able to
+call the main() method several times instead of only one time without
+strange errors.
+
+M. Petter
+Technische Universität München
+2005/09/21
+------------------------------------------------------------------------
 CUP version 0.11a beta 20050920 is a combined bugfix/feature release.
 
 Made use of .peek() function for Stacks in generated parsers.
@@ -7,8 +17,8 @@ Completely rewrote the CUP-anttask to properly call ant even, if You use
 paths including whitespaces.
 
 M. Petter
-Technische UniversitÃ¤t MÃ¼nchen
-2005/06/28
+Technische Universität München
+2005/09/20
 ------------------------------------------------------------------------
 CUP version 0.11a beta 20050628 is a combined bugfix/feature release.
 
@@ -17,7 +27,7 @@ generics handling in CUP. It also introduces a new parameter
 "-typeargs" to cup, whith which one can parametrize the generated parser.
 
 M. Petter
-Technische UniversitÃ¤t MÃ¼nchen
+Technische Universität München
 2005/06/28
 ------------------------------------------------------------------------
 CUP version 0.11a beta 20050516 is a management release.
@@ -28,7 +38,7 @@ Nothing else has changed since the last bugfix release, as indicated in
 the version date.
 
 M. Petter
-Technische UniversitÃ¤t MÃ¼nchen
+Technische Universität München
 2005/05/16
 ------------------------------------------------------------------------
 CUP version 0.10k TUM Edition 20050516 is a bugfix release.
@@ -38,7 +48,7 @@ leading to wildcards like ArrayList<? extends MyClass> being
 destroyed. Meanwhile, everything should work as it is supposed to.
 
 M. Petter
-Technische UniversitÃ¤t MÃ¼nchen
+Technische Universität München
 2005/05/16
 ------------------------------------------------------------------------
 CUP version 0.10k TUM Edition 20050514 is a bugfix/enhancement release.
@@ -49,7 +59,7 @@ even better error informations like column/line and the token in plain text,
 CUP is processing, when the error occurs.
 
 M. Petter
-Technische UniversitÃ¤t MÃ¼nchen
+Technische Universität München
 2005/05/14
 ------------------------------------------------------------------------
 CUP version 0.10k TUM Edition 20050510 is a feature release.
@@ -69,7 +79,7 @@ The CUP frontend, which parses .cup-files has changed to a JFlex-generated
 scanner, which allows an easier maintainance.
 
 M. Petter
-Technische UniversitÃ¤t MÃ¼nchen
+Technische Universität München
 2005/05/10
 ------------------------------------------------------------------------
 CUP version 0.10k is a maintenance release.
