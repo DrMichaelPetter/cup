@@ -75,7 +75,7 @@ public class CUPTask extends Task
 	if (_package!=null){ sc.add("-package"); sc.add(_package); }
 	if (symbols!=null) { sc.add("-symbols"); sc.add(symbols); }
         else symbols="sym";
-	if (expect!=null)  {  sc.add("-expect "); sc.add(expect); }
+	if (expect!=null)  {  sc.add("-expect"); sc.add(expect); }
 	if (_interface)    {  sc.add("-interface"); }
 	if (nonterms)      {  sc.add("-nonterms"); }
 	if (compact_red)   {  sc.add("-compact_red"); }

@@ -1,4 +1,15 @@
 ------------------------------------------------------------------------
+CUP version 0.11a beta 20051104 is a bugfix release.
+
+the buildfile now creates Java 1.2 compliant code as well as it uses an actual
+JDK 1.2 compliant CUP version for bootstrapping. Martin.vGagern@gmx.net has
+contributed to bugfixes, concerning an ant parameter as well as a more
+informative CODE_STRING Token.
+
+M. Petter
+Technische Universität München
+2005/09/21
+------------------------------------------------------------------------
 CUP version 0.11a beta 20050921 is a combined bugfix release.
 
 added calls to clear the content of static fields in CUP, to be able to

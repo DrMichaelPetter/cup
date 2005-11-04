@@ -61,7 +61,8 @@
 
   <target name="compile" depends="jflex">
     <copy todir="${java}"><fileset dir="${src}"></fileset></copy>
-    <javac srcdir="${java}" destdir="${classes}" verbose="off" listfiles="off" debug="on">
+    <javac srcdir="${java}" destdir="${classes}" verbose="off" listfiles="off"
+debug="on" source="1.2" target="1.2">
       <!--compilerarg value="-Xlint:unchecked" /-->
       <classpath refid="libraries"/>
     </javac>

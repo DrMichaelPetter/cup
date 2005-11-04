@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 	this(new InputStreamReader(System.in));
     }
     private StringBuffer sb;
+    private int csline,cscolumn;
     public Symbol symbol(int code){
 //	System.out.println("code:"+code+" "+yytext());
 	return new Symbol(code,yyline+1,yycolumn+1);
@@ -70,7 +71,7 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   ">"           { return symbol(GT);                   }
   "<"           { return symbol(LT);                   }
   {Comment}     {                                      }
-  "{:"          { sb = new StringBuffer(); yybegin(CODESEG);    }
+  "{:"          { sb = new StringBuffer(); csline=yyline+1; cscolumn=yycolumn+1; yybegin(CODESEG);    }
   "package"     { return symbol(PACKAGE);              } 
   "import"      { return symbol(IMPORT);	       }
   "code"        { return symbol(CODE);		       }
@@ -94,7 +95,7 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
 }
 
 <CODESEG> {
-  ":}"         { yybegin(YYINITIAL); return new Symbol(CODE_STRING,sb.toString()); }
+  ":}"         { yybegin(YYINITIAL); return new Symbol(CODE_STRING,csline, cscolumn, sb.toString()); }
   .|\n            { sb.append(yytext()); }
 }
 
