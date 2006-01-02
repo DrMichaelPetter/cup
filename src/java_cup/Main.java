@@ -77,7 +77,7 @@ public class Main {
   /* Options set by the user */
   /*-------------------------*/
   /** User option -- do we print progress messages. */
-  protected static boolean print_progress   = true;
+  protected static boolean print_progress   = false;
   /** User option -- do we produce a dump of the state machine */
   protected static boolean opt_dump_states  = false;
   /** User option -- do we produce a dump of the parse tables */

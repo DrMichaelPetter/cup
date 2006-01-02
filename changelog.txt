@@ -1,4 +1,14 @@
 ------------------------------------------------------------------------
+CUP version 0.11a beta 20060102 is a bugfix release.
+
+Corrected two minor issues: a build.xml bug resulting in a slightly smaller
+runtime JAR (thanks to Florian deissenb@srs.kundenserver.de ) and an 
+incorrect initialized parameter (thanks to Andreas ag@ibag-edv.de)
+
+M. Petter
+Technische Universität München
+2006/01/02
+------------------------------------------------------------------------
 CUP version 0.11a beta 20051104 is a bugfix release.
 
 the buildfile now creates Java 1.2 compliant code as well as it uses an actual
@@ -8,7 +18,7 @@ informative CODE_STRING Token.
 
 M. Petter
 Technische Universität München
-2005/09/21
+2005/11/04
 ------------------------------------------------------------------------
 CUP version 0.11a beta 20050921 is a combined bugfix release.
 
