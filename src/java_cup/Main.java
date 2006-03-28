@@ -3,6 +3,7 @@ package java_cup;
 
 import java.util.Enumeration; 
 import java.io.*;
+import java_cup.runtime.*;
 
 /** This class serves as the main driver for the JavaCup system.
  *  It accepts user options and coordinates overall control flow.
@@ -467,7 +468,8 @@ public class Main {
       parser parser_obj;
 
       /* create a parser and parse with it */
-      parser_obj = new parser();
+      ComplexSymbolFactory csf = new ComplexSymbolFactory();
+      parser_obj = new parser(new Lexer(csf),csf);
       try {
 	if (opt_do_debug)
           parser_obj.debug_parse();

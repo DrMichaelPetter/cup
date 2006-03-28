@@ -191,7 +191,7 @@ action code {:
 
 parser code {:
 
-  /* override error routines */
+ /* override error routines */
   protected Lexer lexer;
   public void report_fatal_error(
     String   message,
@@ -214,9 +214,15 @@ parser code {:
 
 /*---------------------------------------------------------------- */
 
-init with {: lexer = new Lexer(); :}
+init with {: 
+    ComplexSymbolFactory f = new ComplexSymbolFactory();
+    symbolFactory = f;
+    lexer = new Lexer(f); 
+:}
 /*lexer.init(); :};*/
-scan with {: return lexer.next_token(); :};
+scan with {: 
+    return lexer.next_token(); 
+:};
 
 /*----------------------------------------------------------------*/ 
 

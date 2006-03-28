@@ -29,7 +29,8 @@ public class ErrorManager{
         fatals++;
     }
     public void emit_fatal(String message, Symbol sym){
-        System.err.println("Fatal at ("+sym.left+"/"+sym.right+")@"+convSymbol(sym)+" : "+message);
+        //System.err.println("Fatal at ("+sym.left+"/"+sym.right+")@"+convSymbol(sym)+" : "+message);
+        System.err.println("Fatal: "+message+" @ "+sym);
         fatals++;
     }
     public void emit_warning(String message){
@@ -37,7 +38,8 @@ public class ErrorManager{
         warnings++;	
     }
     public void emit_warning(String message, Symbol sym){
-        System.err.println("Warning at ("+sym.left+"/"+sym.right+")@"+convSymbol(sym)+" : "+message);
+//        System.err.println("Warning at ("+sym.left+"/"+sym.right+")@"+convSymbol(sym)+" : "+message);
+        System.err.println("Fatal: "+message+" @ "+sym);
         warnings++;
     }
     public void emit_error(String message){
@@ -45,7 +47,8 @@ public class ErrorManager{
         errors++;
     }
     public void emit_error(String message, Symbol sym){
-        System.err.println("Error at ("+sym.left+"/"+sym.right+")@"+convSymbol(sym)+" : "+message);
+//        System.err.println("Error at ("+sym.left+"/"+sym.right+")@"+convSymbol(sym)+" : "+message);
+        System.err.println("Error: "+message+" @ "+sym);
         errors++;
     }
     private static String convSymbol(Symbol symbol){

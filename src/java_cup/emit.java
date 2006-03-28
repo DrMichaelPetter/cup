@@ -471,7 +471,8 @@ public class emit {
 		// TUM 20050917
 		//".elementAt(" + emit.pre("top") + "-" + roffset + "))"+
 		".peek()"+
-		").right";	  
+                // TUM 20060327 removed .right
+		")"; 	  
 	    if (prod.rhs_length() == 0) 
 	      leftstring = rightstring;
 	    else {
@@ -479,16 +480,19 @@ public class emit {
 	      leftstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") + 
 		  // TUM 20050917
 		  ((loffset==0)?(".peek()"):(".elementAt(" + emit.pre("top") + "-" + loffset + ")")) +
-		  ").left";	  
+                  // TUM 20060327 removed .left
+		  ")";
 	    }
-	    out.println("              " + pre("result") + " = new java_cup.runtime.Symbol(" + 
-			prod.lhs().the_symbol().index() + "/*" +
-			prod.lhs().the_symbol().name() + "*/" + 
+//	    out.println("              " + pre("result") + " = new java_cup.runtime.Symbol(" + 
+	    out.println("              " + pre("result") + " = parser.getSymbolFactory().newSymbol(" + 
+                        "\""+ 	prod.lhs().the_symbol().name() +"\","+ 
+			prod.lhs().the_symbol().index()  +
 			", " + leftstring + ", " + rightstring + ", RESULT);");
 	  } else {
-	    out.println("              " + pre("result") + " = new java_cup.runtime.Symbol(" + 
-			prod.lhs().the_symbol().index() + "/*" +
-			prod.lhs().the_symbol().name() + "*/" + 
+//	    out.println("              " + pre("result") + " = new java_cup.runtime.Symbol(" + 
+	    out.println("              " + pre("result") + " = parser.getSymbolFactory().newSymbol(" + 
+		"\""+ 	prod.lhs().the_symbol().name() +  "\","+ 
+			prod.lhs().the_symbol().index() + 
 			", RESULT);");
 	  }
 	  
@@ -847,6 +851,11 @@ public class emit {
 	  out.println("  /** Constructor which sets the default scanner. */");
 	  out.println("  public " + parser_class_name + 
 		      "(java_cup.runtime.Scanner s) {super(s);}");
+          // TUM 20060327 added SymbolFactory aware constructor
+	  out.println();
+	  out.println("  /** Constructor which sets the default scanner. */");
+	  out.println("  public " + parser_class_name + 
+		      "(java_cup.runtime.Scanner s, java_cup.runtime.SymbolFactory sf) {super(s,sf);}");
       }
 
       /* emit the various tables */

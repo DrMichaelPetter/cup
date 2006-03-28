@@ -28,6 +28,8 @@ Last updated July 2005 (v0.11a)
   </dd><dt> 3.2 </dt><dd> <a href="#ant">CUP and ANT</a>
   </dd><dt> 4.  </dt><dd> <a href="#parser">Customizing the Parser</a>
   </dd><dt> 5.  </dt><dd> <a href="#scanner">Scanner interface</a>
+  </dd><dt> 5.1 </dt><dd> <a href="#basic-symbols">Basic Symbol management</a>
+  </dd><dt> 5.2 </dt><dd> <a href="#advanced-symbols">Advanced Symbol management</a>
   </dd><dt> 6.  </dt><dd> <a href="#errors">Error Recovery</a>
   </dd><dt> 7.  </dt><dd> <a href="#conclusion">Conclusion</a>
   </dd><dt>     </dt><dd> <a href="#refs">References</a>
@@ -178,7 +180,7 @@ part of the specification contains the grammar.<p>
 To produce a parser from this specification we use the CUP generator.
 If this specification were stored in a file <tt>parser.cup</tt>, then 
 (on a Unix system at least) we might invoke CUP using a command like:
-</p><pre><tt> java java_cup.Main &lt; parser.cup</tt> </pre>
+</p><pre><tt> java -jar java-cup-11a.jar parser.cup</tt> </pre>
 In this case, the system will produce two Java source files containing 
 parts of the generated parser: <tt>sym.java</tt> and <tt>parser.java</tt>.  
 As you might expect, these two files contain declarations for the classes 
@@ -638,7 +640,7 @@ to use the Java interpreter to invoke the static method
 Assuming a Unix machine, the simplest way to do this is typically to invoke it 
 directly from the command line with a command such as: 
 
-<pre><tt>    java -jar java-cup-10k-TUM.jar <i>options</i>  <i>inputfile</i></tt></pre>
+<pre><tt>    java -jar java-cup-11a.jar <i>options</i>  <i>inputfile</i></tt></pre>
 
 Once running, CUP expects to find a specification file on standard input
 and produces two Java source files as output. <p>
@@ -922,8 +924,11 @@ with code such as:
       }
 </pre>
 
-<a name="scanner">
+<a name="scanner" />
 <h3>5. Scanner Interface</h3></a>
+
+<a name="basic-symbols" />
+<h4>5.1 Basic Symbol management</h4>
 
 In CUP 0.10j, scanner integration was improved according to
 suggestions made by <a href="http://www.smartsc.com/">David MacMahon</a>.
@@ -993,7 +998,39 @@ generated parser.<p>
 The simple_calc example in the CUP distribution illustrates the use of
 the scanner integration features with a hand-coded scanner.</p><p>
 
-<a name="errors">
+<a name="advanced-symbols" />
+<h4>5.2 Advanced Symbol management</h4>
+
+<p>Since CUP v11a we offer the possibility of advanced symbol handling in CUP.
+Therefore, You can implement Your own SymbolFactory, derived from
+<pre>java_cup.runtime.SymbolFactory</pre>, and have CUP manage Your own type of
+symbols. We've done that for You already in the pre-defined
+<pre>java_cup.runtime.ComplexSymbolFactory</pre>, which provides support for
+detailed location information in the symbol class. Just have a look at CUPs own
+<pre>Lexer.jflex</pre>, which is already using the new feature.</p>
+
+<p>All You have to do is providing Your CUP-generated parser with the new
+SymbolFactory which can be done like this:</p>
+<pre>
+SymbolFactory symbolFactory = new ComplexSymbolFactory();
+MyParser parser = new MyParser(new Lexer(inputfile,symbolFactory),symbolFactory); 
+</pre>
+
+<p>Also, You can use the factory methods in Your SymbolFactory to have
+callbacks/hooks into the semantic action methods. That is especially usefull,
+when You want to equip Your syntax tree with Location information as You can do
+as follows:</p>
+<pre>
+public Symbol newSymbol(String name, Symbol left, Symbol right, Object value){
+   ComplexSymbol sym = (ComplexSymbol)super.newSymbol(name,left,right,value);
+   SyntaxTreeNode node = (SyntaxTreeNode) value;
+   node.setLeft(left.getLeft());
+   node.setRight(right.getRight());
+   return sym;
+}
+</pre>
+
+<a name="errors" />
 <h3>6. Error Recovery</h3></a>
 
 A final important aspect of building parsers with CUP is 

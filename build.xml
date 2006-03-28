@@ -18,38 +18,30 @@
     <mkdir dir="${classes}" />
     <mkdir dir="${dist}" />    
   </target>
+
   <property environment="env" />
-      <path id="libraries">
-        <pathelement location="${lib}" />
-        <fileset dir="${lib}">
-	  <include name="**/*.jar" />
-          <include name="**/*.zip" />
-	</fileset>
-        <pathelement path="${java.class.path}" />
-	<pathelement path="${env.ANT_HOME}/lib/ant.jar" />
-      </path>
 
-      <path id="binaries">
-        <pathelement location="${bin}" />
-        <fileset dir="${bin}">
-	  <include name="**/*.jar" />
-          <include name="**/*.zip" />
-	</fileset>
-        <pathelement path="${java.class.path}" />
-      </path>
+  <path id="libraries">
+     <pathelement location="${src}" />
+     <fileset dir="${lib}">
+	<include name="**/*.jar" />
+     </fileset>
+  </path>
 
-  <!-- deletes all build-related directories -->
+  <path id="binaries">
+     <fileset dir="${bin}">
+	<include name="**/*.jar" />
+     </fileset>
+  </path>
+
   <target name="clean">
-    <!--delete>
-      <fileset dir="${src}" excludes="**/*.java" />
-    </delete-->
     <delete dir="${java}" />
     <delete dir="${classes}" />
     <delete dir="${dist}" />
   </target>
 
-  <taskdef name="cup" classname="java_cup.anttask.CUPTask" classpathref="binaries" />
-  <taskdef name="jflex" classname="JFlex.anttask.JFlexTask" classpathref="binaries" />
+  <taskdef name="cup" classname="java_cup.anttask.CUPTask" classpath="${bin}/java-cup-11.jar" />
+  <taskdef name="jflex" classname="JFlex.anttask.JFlexTask" classpath="${bin}/JFlex.jar" />
 
   <target name="cup" depends="init">
     <cup srcfile="${cup}/parser.cup" interface="on" destdir="${java}" parser="parser" symbols="sym" quiet="false" nonterms="true"/>
@@ -61,27 +53,27 @@
 
   <target name="compile" depends="jflex">
     <copy todir="${java}"><fileset dir="${src}"></fileset></copy>
-    <javac srcdir="${java}" destdir="${classes}" verbose="off" listfiles="off"
-debug="on" source="1.2" target="1.2">
-      <!--compilerarg value="-Xlint:unchecked" /-->
+    <javac srcdir="${java}" destdir="${classes}" verbose="off" listfiles="off" debug="on" source="1.2" target="1.2">
       <classpath refid="libraries"/>
     </javac>
   </target>
 
   <target name="dist" depends="compile">
-   <jar jarfile="${dist}/java-cup-11.jar" basedir="${classes}">
+   <jar jarfile="${dist}/java-cup-11a.jar" basedir="${classes}">
       <manifest>
         <attribute name="Main-Class" value="java_cup/Main" />
-	<attribute name="Class-Path" value="java-cup-11-runtime.jar" />
+	<attribute name="Class-Path" value="java-cup-11a-runtime.jar" />
       </manifest>
     </jar>
-    <jar jarfile="${dist}/java-cup-11-runtime.jar" basedir="${classes}" includes="java_cup/runtime/*">
+    <jar jarfile="${dist}/java-cup-11a-runtime.jar" basedir="${classes}" includes="java_cup/runtime/*">
     </jar>
   </target>
 
   <target name="test" depends="dist">
-    <java jar="${dist}/java-cup-11.jar" fork="true">
+    <java jar="${dist}/java-cup-11a.jar" fork="true">
+        <arg value="-interface" />
         <arg value="${cup}/parser.cup" />
     </java>  
+    
   </target>
 </project>

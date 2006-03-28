@@ -1,4 +1,26 @@
 ------------------------------------------------------------------------
+CUP version 0.11a beta 20060328 is a feature release.
+
+Introduced the concept of the java_cup.runtime.SymbolFactory, which serves
+multiple purposes; now You have the chance to manage extended information
+relating to the sourcecode file in Your symbols, by using own child classes
+of java_cup.runtime.Symbol.
+In Addition to that You can implement Your own child class of SymbolFactory
+to have a callback function whenever a new Symbol is created. This is
+especially handy when equipping Your syntax tree with location information
+from the source code file. For exactly this purpose the new Factories
+java_cup.runtime.DefaultSymbolFactory and
+java_cup.runtime.ComplexSymbolFactory
+are introduced.
+Experiments with the new runtime have revealed a few little flaws in the
+build file, resulting in classpath confusion: In fact, JFlex itself depends
+on the CUP runtime, leading to a mixture of runtimes, that could spoil Your
+build process. I have corrected the errors in the CUP buildfile.
+
+M. Petter
+Technische Universität München
+2006/03/28
+------------------------------------------------------------------------
 CUP version 0.11a beta 20060102 is a bugfix release.
 
 Corrected two minor issues: a build.xml bug resulting in a slightly smaller
