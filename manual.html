@@ -16,7 +16,7 @@ Flannery</a>, <a href="http://www.pdos.lcs.mit.edu/%7Ecananian/">C. Scott Anania
 <a href="http://www.cs.princeton.edu/%7Edanwang">Dan Wang</a> with advice from 
 <a href="http://www.cs.princeton.edu/%7Eappel">Andrew W. Appel</a><br>
 Now actualized by <a href="http://www2.cs.tum.edu/%7Epetter">Michael Petter</a><br>
-Last updated July 2005 (v0.11a)
+Last updated March 2006 (v0.11a)
 <hr>
 
 <h3>Table of Contents</h3>
@@ -1003,11 +1003,11 @@ the scanner integration features with a hand-coded scanner.</p><p>
 
 <p>Since CUP v11a we offer the possibility of advanced symbol handling in CUP.
 Therefore, You can implement Your own SymbolFactory, derived from
-<pre>java_cup.runtime.SymbolFactory</pre>, and have CUP manage Your own type of
+<code>java_cup.runtime.SymbolFactory</code>, and have CUP manage Your own type of
 symbols. We've done that for You already in the pre-defined
-<pre>java_cup.runtime.ComplexSymbolFactory</pre>, which provides support for
+<code>java_cup.runtime.ComplexSymbolFactory</code>, which provides support for
 detailed location information in the symbol class. Just have a look at CUPs own
-<pre>Lexer.jflex</pre>, which is already using the new feature.</p>
+<code>Lexer.jflex</code>, which is already using the new feature.</p>
 
 <p>All You have to do is providing Your CUP-generated parser with the new
 SymbolFactory which can be done like this:</p>
@@ -1213,6 +1213,8 @@ import sym;
 public class scanner {
   /* single lookahead character */
   protected static int next_char;
+  // since cup v11 we use SymbolFactories rather than Symbols
+  private SymbolFactory sf = new DefaultSymbolFactory();
 
   /* advance input by one character */
   protected static void advance()
@@ -1239,18 +1241,18 @@ public class scanner {
 	        i_val = i_val * 10 + (next_char - '0');
 	        advance();
 	      } while (next_char &gt;= '0' &amp;&amp; next_char &lt;= '9');
-	    return new Symbol(sym.NUMBER, new Integer(i_val));
+	    return sf.newSymbol("NUMBER",sym.NUMBER, new Integer(i_val));
 
-	    case ';': advance(); return new Symbol(sym.SEMI);
-	    case '+': advance(); return new Symbol(sym.PLUS);
-	    case '-': advance(); return new Symbol(sym.MINUS);
-	    case '*': advance(); return new Symbol(sym.TIMES);
-	    case '/': advance(); return new Symbol(sym.DIVIDE);
-	    case '%': advance(); return new Symbol(sym.MOD);
-	    case '(': advance(); return new Symbol(sym.LPAREN);
-	    case ')': advance(); return new Symbol(sym.RPAREN);
+	    case ';': advance(); return sf.newSymbol("SEMI",sym.SEMI);
+	    case '+': advance(); return sf.newSymbol("PLUS",sym.PLUS);
+	    case '-': advance(); return sf.newSymbol("MINUS",sym.MINUS);
+	    case '*': advance(); return sf.newSymbol("TIMES",sym.TIMES);
+	    case '/': advance(); return sf.newSymbol("DIVIDE",sym.DIVIDE);
+	    case '%': advance(); return sf.newSymbol("MOD",sym.MOD);
+	    case '(': advance(); return sf.newSymbol("LPAREN",sym.LPAREN);
+	    case ')': advance(); return sf.newSymbol("RPAREN",sym.RPAREN);
 
-	    case -1: return new Symbol(sym.EOF);
+	    case -1: return return sf.newSymbol("EOF",sym.EOF);
 
 	    default: 
 	      /* in this simple scanner we just ignore everything else */
@@ -1471,7 +1473,12 @@ package have been stomped on.  Documentation was updated, as well.
 </dd><dt>0.10j</dt><dd>July 1999, broadened the CUP input grammar to allow more
 flexibility and improved scanner integration via the
 <code>java_cup.runtime.Scanner</code> interface.
-</dd></dl>
+</dd>
+<dt>0.11a</dt>
+<dd>the changelog has <a href="http://www2.cs.tum.edu/repos/cup/develop/changelog.txt">moved</a> to the
+internet to sustain a more up-to-date state.
+</dd>
+</dl>
 
 
 <hr>
