@@ -1,4 +1,14 @@
 ------------------------------------------------------------------------
+CUP version 0.11a beta 200603230 is a bugfix release.
+
+corrected new issue with SymbolFactory. Forgot to offer one of the non-
+propagating factory methods for Symbol generation. (thanks to 
+Robert.Streich@ObjectFx.com )
+
+M. Petter
+Technische Universität München
+2006/03/30
+------------------------------------------------------------------------
 CUP version 0.11a beta 20060328 is a feature release.
 
 Introduced the concept of the java_cup.runtime.SymbolFactory, which serves

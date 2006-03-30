@@ -49,6 +49,10 @@ public class ComplexSymbolFactory implements SymbolFactory{
             super(id);
             this.name=name;
         }
+        public ComplexSymbol(String name, int id, Object value) {
+            super(id,value);
+            this.name=name;
+        }
         public String toString(){
             if (xleft==null || xright==null) return "Symbol: "+name;
             return "Symbol: "+name+" ("+xleft+" - "+xright+")";
@@ -105,6 +109,9 @@ public class ComplexSymbolFactory implements SymbolFactory{
     }
     public Symbol newSymbol(String name, int id){
         return new ComplexSymbol(name,id);
+    }
+    public Symbol newSymbol(String name, int id, Object value){
+        return new ComplexSymbol(name,id,value);
     }
     public Symbol startSymbol(String name, int id, int state){
         return new ComplexSymbol(name,id,state);
