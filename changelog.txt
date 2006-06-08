@@ -1,4 +1,16 @@
 ------------------------------------------------------------------------
+CUP version 0.11a beta 20060608 is a bugfix release.
+
+Embedded actions in CUP didn't really relay their intermediate results to the
+main action part. now, embedded actions have the following (new) properties:
+- the LHS has the type of the "parent" lhs
+- the RESULT variable of following embedded actions have their RESULT
+  variables initialized with the RESULT of the previous embedded action
+
+M. Petter, A. Flexeder
+Technische Universität München
+2006/06/08
+------------------------------------------------------------------------
 CUP version 0.11a beta 200603230 is a bugfix release.
 
 corrected new issue with SymbolFactory. Forgot to offer one of the non-

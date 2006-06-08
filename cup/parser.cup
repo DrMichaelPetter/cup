@@ -569,7 +569,7 @@ production ::=
 	  new_rhs();
 	:}
 	COLON_COLON_EQUALS
-	{: :}
+/*	{: :}*/
 	rhs_list
 	SEMI
 	|

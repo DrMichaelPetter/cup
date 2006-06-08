@@ -564,7 +564,7 @@ public class production {
       non_terminal new_nt;
       production   new_prod;
       String declare_str;
-      
+      int lastLocation = -1;
       /* walk over the production and process each action */
       for (int act_loc = 0; act_loc < rhs_length(); act_loc++)
 	if (rhs(act_loc).is_action())
@@ -574,15 +574,16 @@ public class production {
 	    declare_str = declare_labels(
 		      _rhs, act_loc, "");
 	    /* create a new non terminal for the action production */
-	    new_nt = non_terminal.create_new();
+	    new_nt = non_terminal.create_new(null, lhs().the_symbol().stack_type()); // TUM 20060608 embedded actions patch
 	    new_nt.is_embedded_action = true; /* 24-Mar-1998, CSA */
 
 	    /* create a new production with just the action */
 	    new_prod = new action_production(this, new_nt, null, 0, 
-		declare_str + ((action_part)rhs(act_loc)).code_string());
+		declare_str + ((action_part)rhs(act_loc)).code_string(), (lastLocation==-1)?-1:(act_loc-lastLocation));
 
 	    /* replace the action with the generated non terminal */
 	    _rhs[act_loc] = new symbol_part(new_nt);
+            lastLocation = act_loc;
 	  }
     }
 

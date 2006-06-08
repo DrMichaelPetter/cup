@@ -415,18 +415,34 @@ public class emit {
 	  /* give them their own block to work in */
 	  out.println("            {");
 
+
+          /**
+           * TUM 20060608 intermediate result patch
+           */
+          String result = "null";
+          if (prod instanceof action_production) {
+              int lastResult = ((action_production)prod).getIndexOfIntermediateResult();
+              if (lastResult!=-1) {
+                  result =  "(" + prod.lhs().the_symbol().stack_type() + ") " +
+                      "((java_cup.runtime.Symbol) " + emit.pre("stack") + 
+                      // TUM 20050917
+                      ((lastResult==1)?".peek()":(".elementAt(" + emit.pre("top") + "-" + (lastResult-1) + ")"))+
+                      ").value";
+              }
+          }
+
 	  /* create the result symbol */
 	  /*make the variable RESULT which will point to the new Symbol (see below)
 	    and be changed by action code
 	    6/13/96 frankf */
 	  out.println("              " +  prod.lhs().the_symbol().stack_type() +
-		      " RESULT = null;");
+		      " RESULT ="+result+";");
 
 	  /* Add code to propagate RESULT assignments that occur in
 	   * action code embedded in a production (ie, non-rightmost
 	   * action code). 24-Mar-1998 CSA
 	   */
-	  for (int i=0; i<prod.rhs_length(); i++) {
+	  for (int i=prod.rhs_length()-1; i>0; i--) {
 	    // only interested in non-terminal symbols.
 	    if (!(prod.rhs(i) instanceof symbol_part)) continue;
 	    symbol s = ((symbol_part)prod.rhs(i)).the_symbol();
@@ -436,19 +452,25 @@ public class emit {
 	    if (((non_terminal)s).is_embedded_action == false) continue;
 	    // OK, it fits.  Make a conditional assignment to RESULT.
 	    int index = prod.rhs_length() - i - 1; // last rhs is on top.
-	    out.println("              " + "// propagate RESULT from " +
-			s.name());
-	    out.println("              " + "if ( " +
-	      "((java_cup.runtime.Symbol) " + emit.pre("stack") + 
-			// TUM 20050917
-			((index==0)?".peek()":(".elementAt(" + emit.pre("top") + "-" + index + ")"))+
-			").value != null )");
-	    out.println("                " + "RESULT = " +
+            // set comment to inform about where the intermediate result came from
+	    out.println("              " + "// propagate RESULT from " +s.name());
+//            // look out, whether the intermediate result is null or not
+//	    out.println("              " + "if ( " +
+//	      "((java_cup.runtime.Symbol) " + emit.pre("stack") + 
+//			// TUM 20050917
+//			((index==0)?".peek()":(".elementAt(" + emit.pre("top") + "-" + index + ")"))+
+//			").value != null )");
+
+// TUM 20060608: even when its null: who cares?
+
+	    // store the intermediate result into RESULT
+            out.println("                " + "RESULT = " +
 	      "(" + prod.lhs().the_symbol().stack_type() + ") " +
 	      "((java_cup.runtime.Symbol) " + emit.pre("stack") + 
 			// TUM 20050917
 			((index==0)?".peek()":(".elementAt(" + emit.pre("top") + "-" + index + ")"))+
 			").value;");
+            break;
 	  }
 
         /* if there is an action string, emit it */
