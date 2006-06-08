@@ -442,7 +442,7 @@ public class emit {
 	   * action code embedded in a production (ie, non-rightmost
 	   * action code). 24-Mar-1998 CSA
 	   */
-	  for (int i=prod.rhs_length()-1; i>0; i--) {
+	  for (int i=prod.rhs_length()-1; i>=0; i--) {
 	    // only interested in non-terminal symbols.
 	    if (!(prod.rhs(i) instanceof symbol_part)) continue;
 	    symbol s = ((symbol_part)prod.rhs(i)).the_symbol();
