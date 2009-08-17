@@ -121,6 +121,7 @@ public abstract class lr_parser {
      * Simple constructor. 
      */
     public lr_parser() {
+        symbolFactory = new DefaultSymbolFactory();
     }
     
     /** 
