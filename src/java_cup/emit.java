@@ -532,7 +532,7 @@ public class emit {
       out.println("          /* . . . . . .*/");
       out.println("          default:");
       out.println("            throw new Exception(");
-      out.println("               \"Invalid action number found in " +
+      out.println("               \"Invalid action number \"+"+pre("act_num")+"+\"found in " +
 				  "internal parse table\");");
       out.println();
       out.println("        }");
@@ -559,7 +559,7 @@ public class emit {
       out.println();
       /* switch top */
       out.println("      /* select the action based on the action number */");
-      out.println("      switch (" + pre("act_num") + "%"+UPPERLIMIT+ ")");
+      out.println("      switch (" + pre("act_num") + "/"+UPPERLIMIT+ ")");
       out.println("        {");
 
       /* emit action code for each production as a separate case */
