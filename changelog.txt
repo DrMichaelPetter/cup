@@ -1,3 +1,11 @@
+CUP version 0.11b beta 20140220 is a feature release.
+
+Main switch statement now splits the action code in bundles of 300 productions
+on several different method bodies. Should fix the 65k size boundary problem
+
+M. Petter
+Technische Universität München
+2014/02/20
 ------------------------------------------------------------------------
 CUP version 0.11a beta 20060608 is a bugfix release.
 

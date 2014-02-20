@@ -30,7 +30,7 @@ public class version {
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
   /** The update letter. */
-  public static final String update = "a beta 20060608";
+  public static final String update = "b beta 20140220";
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
@@ -46,7 +46,7 @@ public class version {
 
   /** Name of the author */
   public static final String author_str =
-      "Scott E. Hudson, Frank Flannery, Andrea Flexeder, Michael Petter and C. Scott Ananian";
+      "Scott E. Hudson, Frank Flannery, Michael Petter and C. Scott Ananian";
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 

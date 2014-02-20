@@ -378,35 +378,30 @@ public class emit {
       out.println("    this.parser = parser;");
       out.println("  }");
 
-      /* action method head */
       out.println();
+      final int UPPERLIMIT = 300;
+      for (int instancecounter = 0; instancecounter <= production.number()/UPPERLIMIT; instancecounter++) {
       out.println("  /** Method with the actual generated action code. */");
       out.println("  public final java_cup.runtime.Symbol " + 
-		     pre("do_action") + "(");
+		     pre("do_action_part")+ String.format("%08d",new Integer(instancecounter)) +"(");
       out.println("    int                        " + pre("act_num,"));
       out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
       out.println("    java.util.Stack            " + pre("stack,"));
       out.println("    int                        " + pre("top)"));
       out.println("    throws java.lang.Exception");
       out.println("    {");
-
-      /* declaration of result symbol */
-      /* New declaration!! now return Symbol
-	 6/13/96 frankf */
       out.println("      /* Symbol object for return from actions */");
       out.println("      java_cup.runtime.Symbol " + pre("result") + ";");
       out.println();
-
-      /* switch top */
       out.println("      /* select the action based on the action number */");
       out.println("      switch (" + pre("act_num") + ")");
       out.println("        {");
-
+      // START Switch
       /* emit action code for each production as a separate case */
-      for (Enumeration p = production.all(); p.hasMoreElements(); )
+      int proditeration = instancecounter*UPPERLIMIT;
+      prod=production.find(proditeration);
+      for ( ;proditeration<Math.min((instancecounter+1)*UPPERLIMIT,production.number());prod=(production)production.find(++proditeration) )
 	{
-	  prod = (production)p.nextElement();
-
 	  /* case label */
           out.println("          /*. . . . . . . . . . . . . . . . . . . .*/");
           out.println("          case " + prod.index() + ": // " + 
@@ -533,6 +528,51 @@ public class emit {
 	  out.println();
 	}
 
+      // END Switch
+      out.println("          /* . . . . . .*/");
+      out.println("          default:");
+      out.println("            throw new Exception(");
+      out.println("               \"Invalid action number found in " +
+				  "internal parse table\");");
+      out.println();
+      out.println("        }");
+      out.println("    } /* end of method */");
+      }
+
+      /* action method head */
+      out.println();
+      out.println("  /** Method with the actual generated action code. */");
+      out.println("  public final java_cup.runtime.Symbol " + 
+		     pre("do_action") + "(");
+      out.println("    int                        " + pre("act_num,"));
+      out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
+      out.println("    java.util.Stack            " + pre("stack,"));
+      out.println("    int                        " + pre("top)"));
+      out.println("    throws java.lang.Exception");
+      out.println("    {");
+
+      /* declaration of result symbol */
+      /* New declaration!! now return Symbol
+	 6/13/96 frankf */
+      out.println("      /* Symbol object for return from actions */");
+      out.println("      java_cup.runtime.Symbol " + pre("result") + ";");
+      out.println();
+      /* switch top */
+      out.println("      /* select the action based on the action number */");
+      out.println("      switch (" + pre("act_num") + "%"+UPPERLIMIT+ ")");
+      out.println("        {");
+
+      /* emit action code for each production as a separate case */
+      for (int instancecounter = 0; instancecounter <= production.number()/UPPERLIMIT; instancecounter++) {
+	  /* case label */
+          out.println("          /*. . . . . . . . . . . . . . . . . . . .*/");
+          out.println("          case " + instancecounter + ": return " + pre("do_action_part")+ 
+		  String.format("%08d",new Integer(instancecounter))+"(");
+      out.println("                               " + pre("act_num,"));
+      out.println("                               " + pre("parser,"));
+      out.println("                               " + pre("stack,"));
+      out.println("                               " + pre("top);"));
+      }
       /* end of switch */
       out.println("          /* . . . . . .*/");
       out.println("          default:");
