@@ -341,6 +341,7 @@ public class emit {
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
 
+  static final int UPPERLIMIT = 300;
   /** Emit code for the non-public class holding the actual action code. 
    * @param out        stream to produce output on.
    * @param start_prod the start production of the grammar.
@@ -379,9 +380,8 @@ public class emit {
       out.println("  }");
 
       out.println();
-      final int UPPERLIMIT = 300;
       for (int instancecounter = 0; instancecounter <= production.number()/UPPERLIMIT; instancecounter++) {
-      out.println("  /** Method with the actual generated action code. */");
+      out.println("  /** Method "+instancecounter+" with the actual generated action code for actions "+(instancecounter*UPPERLIMIT)+" to "+((instancecounter+1)*UPPERLIMIT) +". */");
       out.println("  public final java_cup.runtime.Symbol " + 
 		     pre("do_action_part")+ String.format("%08d",new Integer(instancecounter)) +"(");
       out.println("    int                        " + pre("act_num,"));
@@ -541,7 +541,7 @@ public class emit {
 
       /* action method head */
       out.println();
-      out.println("  /** Method with the actual generated action code. */");
+      out.println("  /** Method splitting the generated action code into several parts. */");
       out.println("  public final java_cup.runtime.Symbol " + 
 		     pre("do_action") + "(");
       out.println("    int                        " + pre("act_num,"));
@@ -551,36 +551,44 @@ public class emit {
       out.println("    throws java.lang.Exception");
       out.println("    {");
 
-      /* declaration of result symbol */
-      /* New declaration!! now return Symbol
-	 6/13/96 frankf */
-      out.println("      /* Symbol object for return from actions */");
-      out.println("      java_cup.runtime.Symbol " + pre("result") + ";");
-      out.println();
+      if (production.number()<UPPERLIMIT) { // Make it simple for the optimizer to inline!
+	  out.println("              return " + pre("do_action_part")+ String.format("%08d",new Integer(0))+"(");
+	  out.println("                               " + pre("act_num,"));
+	  out.println("                               " + pre("parser,"));
+	  out.println("                               " + pre("stack,"));
+	  out.println("                               " + pre("top);"));
+	  out.println("    }");
+
+	  /* end of class */
+	  out.println("}");
+	  out.println();
+
+	  action_code_time = System.currentTimeMillis() - start_time;
+	  return;
+      }
+
       /* switch top */
-      out.println("      /* select the action based on the action number */");
+      out.println("      /* select the action handler based on the action number */");
       out.println("      switch (" + pre("act_num") + "/"+UPPERLIMIT+ ")");
       out.println("        {");
 
       /* emit action code for each production as a separate case */
       for (int instancecounter = 0; instancecounter <= production.number()/UPPERLIMIT; instancecounter++) {
 	  /* case label */
-          out.println("          /*. . . . . . . . . . . . . . . . . . . .*/");
-          out.println("          case " + instancecounter + ": return " + pre("do_action_part")+ 
-		  String.format("%08d",new Integer(instancecounter))+"(");
-      out.println("                               " + pre("act_num,"));
-      out.println("                               " + pre("parser,"));
-      out.println("                               " + pre("stack,"));
-      out.println("                               " + pre("top);"));
+          out.println("          /*. . . . . . . . "+(instancecounter*UPPERLIMIT)+" < #action < "+((instancecounter+1)*UPPERLIMIT)+". . . . . . . . . . . .*/");
+          out.println("          case " + instancecounter + ": ");
+	  out.println("              return " + pre("do_action_part")+ String.format("%08d",new Integer(instancecounter))+"(");
+	  out.println("                               " + pre("act_num,"));
+	  out.println("                               " + pre("parser,"));
+	  out.println("                               " + pre("stack,"));
+	  out.println("                               " + pre("top);"));
       }
-      /* end of switch */
-      out.println("          /* . . . . . .*/");
+
+      out.println("          /* . . . no valid action number: . . .*/");
       out.println("          default:");
-      out.println("            throw new Exception(");
-      out.println("               \"Invalid action number found in " +
-				  "internal parse table\");");
+      out.println("            throw new Exception(\"Invalid action number found in internal parse table\");");
       out.println();
-      out.println("        }");
+      out.println("        }      /* end of switch */");
 
       /* end of method */
       out.println("    }");
