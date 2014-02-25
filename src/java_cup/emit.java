@@ -500,13 +500,11 @@ public class emit {
                   // TUM 20060327 removed .left
 		  ")";
 	    }
-//	    out.println("              " + pre("result") + " = new java_cup.runtime.Symbol(" + 
 	    out.println("              " + pre("result") + " = parser.getSymbolFactory().newSymbol(" + 
                         "\""+ 	prod.lhs().the_symbol().name() +"\","+ 
 			prod.lhs().the_symbol().index()  +
 			", " + leftstring + ", " + rightstring + ", RESULT);");
 	  } else {
-//	    out.println("              " + pre("result") + " = new java_cup.runtime.Symbol(" + 
 	    out.println("              " + pre("result") + " = parser.getSymbolFactory().newSymbol(" + 
 		"\""+ 	prod.lhs().the_symbol().name() +  "\","+ 
 			prod.lhs().the_symbol().index() + 

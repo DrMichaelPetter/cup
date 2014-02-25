@@ -77,19 +77,19 @@ public class ComplexSymbolFactory implements SymbolFactory{
             if (right!=null) this.xright= ((ComplexSymbol)right).xright;
         }
         public ComplexSymbol(String name, int id, Location left, Location right) {
-            super(id);
+            super(id,left.offset,right.offset);
             this.name=name;
             this.xleft=left;
             this.xright=right;
         }
         public ComplexSymbol(String name, int id, Symbol left, Symbol right, Object value) {
-            super(id,value);
+            super(id,left.l,right.r,value);
             this.name=name;
             if (left!=null)  this.xleft = ((ComplexSymbol)left).xleft;
             if (right!=null) this.xright= ((ComplexSymbol)right).xright;
         }
         public ComplexSymbol(String name, int id, Location left, Location right, Object value) {
-            super(id,value);
+            super(id,left.offset,right.offset,value);
             this.name=name;
             this.xleft=left;
             this.xright=right;
