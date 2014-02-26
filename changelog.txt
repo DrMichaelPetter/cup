@@ -1,3 +1,13 @@
+CUP version 0.11b beta 20140226 is a feature release.
+
+Command line flag -locations now triggers the generation of the identifiers
+xleft and xright in the actions section instead of left and right.
+Both are of type ComplexSymbolFactory.Location instead of plain ints.
+
+M. Petter
+Technische Universität München
+2014/02/26
+------------------------------------------------------------------------
 CUP version 0.11b beta 20140220 is a feature release.
 
 Main switch statement now splits the action code in bundles of 300 productions
