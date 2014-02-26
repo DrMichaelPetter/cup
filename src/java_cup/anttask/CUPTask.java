@@ -56,6 +56,7 @@ public class CUPTask extends Task
     private boolean time=false;
     private boolean debug=false;
     private boolean nopositions=false;
+    private boolean locations=true;
     private boolean noscanner=false;
     private boolean force=false;
     private boolean quiet=false;
@@ -89,6 +90,7 @@ public class CUPTask extends Task
 	if (time)          {  sc.add("-time"); }
 	if (debug)         {  sc.add("-debug"); }
 	if (nopositions)   {  sc.add("-nopositions"); }
+	if (locations)     {  sc.add("-locations"); }
 	if (noscanner)     {  sc.add("-noscanner"); }
 	if (!quiet) log ("This is "+version.title_str);
         if (!quiet) log ("Authors : "+version.author_str);
@@ -577,6 +579,23 @@ public class CUPTask extends Task
      */
     public void setNopositions(boolean argNopositions){
 	this.nopositions = argNopositions;
+    }
+    /**
+     * Gets the value of locations
+     *
+     * @return the value of locations
+     */
+    public boolean isLocations() {
+	return this.locations;
+    }
+
+    /**
+     * Sets the value of locations
+     *
+     * @param argLocations Value to assign to this.locations
+     */
+    public void setLocations(boolean argLocations){
+	this.locations = argLocations;
     }
 
     /**
