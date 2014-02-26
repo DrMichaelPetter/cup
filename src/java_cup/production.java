@@ -396,6 +396,7 @@ public class production {
 
       /* Put in the left/right value labels */
       if (emit.lr_values()){
+	if (!emit.locations())
         ret = "\t\tint " + labelname + "left = ((java_cup.runtime.Symbol)" + 
 	  emit.pre("stack") + 
  	    // TUM 20050917
@@ -406,8 +407,8 @@ public class production {
  	    // TUM 20050917
 	    ((offset==0)?".peek()":(".elementAt(" + emit.pre("top") + "-" + offset + ")"))+
 	    ").right;\n";
-	if (emit.locations())
-        ret += "\t\tLocation " + labelname + "xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)" + 
+	else
+        ret = "\t\tLocation " + labelname + "xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)" + 
 	  emit.pre("stack") + 
  	    // TUM 20050917
 	    ((offset==0)?".peek()":(".elementAt(" + emit.pre("top") + "-" + offset + ")"))+

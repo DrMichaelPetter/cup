@@ -364,6 +364,7 @@ public class Main {
 	  else if (argv[i].equals("-debug"))        opt_do_debug = true;
 	  /* frankf 6/18/96 */
 	  else if (argv[i].equals("-nopositions"))  lr_values = false;
+	  else if (argv[i].equals("-locations"))    locations = true;
 	  /* CSA 12/21/97 */
 	  else if (argv[i].equals("-interface"))    sym_interface = true;
 	  /* CSA 23-Jul-1999 */

@@ -904,6 +904,8 @@ public class emit {
       /* user supplied imports */
       for (int i = 0; i < import_list.size(); i++)
 	out.println("import " + import_list.elementAt(i) + ";");
+      if (locations())
+	out.println("import java_cup.runtime.ComplexSymbolFactory.Location;");
 
       /* class header */
       out.println();

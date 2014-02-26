@@ -54,7 +54,7 @@ public class ComplexSymbolFactory implements SymbolFactory{
      */
     public static class ComplexSymbol extends Symbol {
         protected String name;
-        protected Location xleft,xright;
+        public Location xleft,xright;
         public ComplexSymbol(String name, int id) {
             super(id);
             this.name=name;
