@@ -19,6 +19,7 @@ public class ComplexSymbolFactory implements SymbolFactory{
         public Location(String unit, int line, int column, int offset){
 	   this(unit,line,column);
 	   this.offset=offset;
+	}
         public Location(String unit, int line, int column){
             this.unit=unit;
             this.line=line;
@@ -42,7 +43,7 @@ public class ComplexSymbolFactory implements SymbolFactory{
             return unit;
         }
         public String toString(){
-            return getUnit()+":"getLine()+"/"+getColumn()+"("+offset+")";
+            return getUnit()+":"+getLine()+"/"+getColumn()+"("+offset+")";
         }
         public int getOffset(){
             return offset;
@@ -83,7 +84,7 @@ public class ComplexSymbolFactory implements SymbolFactory{
             this.xright=right;
         }
         public ComplexSymbol(String name, int id, Symbol left, Symbol right, Object value) {
-            super(id,left.l,right.r,value);
+            super(id,left.left,right.right,value);
             this.name=name;
             if (left!=null)  this.xleft = ((ComplexSymbol)left).xleft;
             if (right!=null) this.xright= ((ComplexSymbol)right).xright;
