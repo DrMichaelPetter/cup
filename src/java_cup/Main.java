@@ -105,7 +105,7 @@ public class Main {
   /* frankf added this 6/18/96 */
   /** User option -- should generator generate code for left/right values? */
   protected static boolean lr_values = true;
-  protected static boolean locations = true;
+  protected static boolean locations = false;
   /** User option -- should symbols be put in a class or an interface? [CSA]*/
   protected static boolean sym_interface = false;
 
