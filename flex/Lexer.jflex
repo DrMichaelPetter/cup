@@ -23,11 +23,9 @@ import java.io.InputStreamReader;
     private ComplexSymbolFactory symbolFactory;
     private int csline,cscolumn;
     public Symbol symbol(String name, int code){
-//	System.out.println("code:"+code+" "+yytext());
 	return symbolFactory.newSymbol(name, code,new Location(yyline+1,yycolumn+1-yylength()),new Location(yyline+1,yycolumn+1));
     }
     public Symbol symbol(String name, int code, String lexem){
-//	System.out.println("code:"+code+", lexem :"+lexem);
 	return symbolFactory.newSymbol(name, code, new Location(yyline+1, yycolumn +1), new Location(yyline+1,yycolumn+yylength()), lexem);
     }
     protected void emit_warning(String message){

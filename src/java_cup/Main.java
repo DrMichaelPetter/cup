@@ -251,6 +251,7 @@ public class Main {
       System.err.println(message);
       System.err.println();
       System.err.println(
+version.title_str + "\n" +
 "Usage: " + version.program_name + " [options] [filename]\n" +
 "  and expects a specification file on standard input if no filename is given.\n" +
 "  Legal options include:\n" +
@@ -701,7 +702,7 @@ public class Main {
 
       System.err.println(
 	"---------------------------------------------------- (" + 
-	 version.version_str + ")");
+	 version.title_str + ")");
     }
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/

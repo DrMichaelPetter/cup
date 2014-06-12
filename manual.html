@@ -2,8 +2,6 @@
 <title>CUP User's Manual</title></head><body>
 
 <hr>
-<img src="manual_dateien/cup_logo.gif" alt="[CUP Logo Image]">
-<hr>
 <h1>CUP User's Manual</h1>
 <h3><a href="http://www.cc.gatech.edu/gvu/people/Faculty/Scott.E.Hudson.html">
 Scott E. Hudson</a><br> 
@@ -13,10 +11,10 @@ Graphics Visualization and Usability Center</a><br>
 Georgia Institute of Technology</a></h3>
 Modified by <a href="http://www.princeton.edu/%7Efrankf">Frank
 Flannery</a>, <a href="http://www.pdos.lcs.mit.edu/%7Ecananian/">C. Scott Ananian</a>, 
-<a href="http://www.cs.princeton.edu/%7Edanwang">Dan Wang</a> with advice from 
+<a href="http://www.cs.princeton.edu/%7Edanwang">Dan Wang</a>, <a href="http://www2.cs.tum.edu/%7Epetter">Michael Petter</a> with advice from 
 <a href="http://www.cs.princeton.edu/%7Eappel">Andrew W. Appel</a><br>
-Now actualized by <a href="http://www2.cs.tum.edu/%7Epetter">Michael Petter</a><br>
-Last updated March 2006 (v0.11a)
+<br>
+Last updated  06/2014 (v0.11b)
 <hr>
 
 <h3>Table of Contents</h3>
@@ -1006,7 +1004,7 @@ Therefore, You can implement Your own SymbolFactory, derived from
 <code>java_cup.runtime.SymbolFactory</code>, and have CUP manage Your own type of
 symbols. We've done that for You already in the pre-defined
 <code>java_cup.runtime.ComplexSymbolFactory</code>, which provides support for
-detailed location information in the symbol class. Just have a look at CUPs own
+detailed location information in the symbol class. Just have a look at CUP's own
 <code>Lexer.jflex</code>, which is already using the new feature.</p>
 
 <p>All You have to do is providing Your CUP-generated parser with the new
@@ -1016,19 +1014,38 @@ SymbolFactory symbolFactory = new ComplexSymbolFactory();
 MyParser parser = new MyParser(new Lexer(inputfile,symbolFactory),symbolFactory); 
 </pre>
 
-<p>Also, You can use the factory methods in Your SymbolFactory to have
-callbacks/hooks into the semantic action methods. That is especially usefull,
-when You want to equip Your syntax tree with Location information as You can do
-as follows:</p>
+<p>The <code>ComplexSymbolFactory</code> is used straight-forward: In Your
+lexer, instead of directly creating <code>Symbol</code>-Objects, You call
+the factory's creation methods, called <code>newSymbol(...)</code>.</p>
+
+<p>Most of the times, You will want to use just the <code>ComplexSymbolFactory</code>.
+You can do that, by adding convenience methods into Your parser's body, like the following one
+for symobls with an attached String-value:</p>
 <pre>
-public Symbol newSymbol(String name, Symbol left, Symbol right, Object value){
-   ComplexSymbol sym = (ComplexSymbol)super.newSymbol(name,left,right,value);
-   SyntaxTreeNode node = (SyntaxTreeNode) value;
-   node.setLeft(left.getLeft());
-   node.setRight(right.getRight());
-   return sym;
-}
+ public Symbol symbol(String plainname, int terminalcode, String lexem){
+    return symbolFactory.newSymbol(plainname, terminalcode, new Location(yyline+1, yycolumn +1), new Location(yyline+1,yycolumn+yylength()), lexem);
+ }
 </pre>
+<p>The <code>Location</code>-Objects provide a convenient way to manage detailed 
+position informations for Your symbols. In order to use them in Your action specifications,
+don't forget to set the <code>-locations</code>-commandline-parameter when running CUP!
+This generates into the frame of each production no plain integer values (referred to via <code>??left,??right</code>,
+with ?? being Your symbol name) any more, but Your beloved Location objects (<code>??xleft,??xright</code>, again
+with ?? Your symbol's name). You can then access all its information like this:</p>
+<pre>
+expr      ::= expr:e1 PLUS expr:e2    
+	      {: RESULT = BinExpr.createAdd(e1,e2);           :} 
+	      | NUMBER:n                 
+	      {: RESULT = Expr.createConst(nxleft,n,nxright); :}
+</pre>
+<p>In the example, we create an expression tree from our input language. Here,
+we store the location information for the subexpressions in the AST. 
+This can be seen in the action for the <code>NUMBER</code>, where we access
+<code>nxleft</code> and <code>nxright</code>. Note, that in this example we
+only store the locations of leaves directly. In a convenient implementation
+of the AST, we would expect a recursive function, that computes the locations for each
+intermediary node in the tree.
+</p>
 
 <a name="errors" />
 <h3>6. Error Recovery</h3></a>

@@ -15,36 +15,84 @@ package java_cup.runtime;
 public class ComplexSymbolFactory implements SymbolFactory{
     public static class Location {
         private String unit="unknown";
-        private int line, column, offset=0;
+        private int line, column, offset=-1;
+	/**
+	 * Location Object
+	 * stores compilation unit, line, column and offset to the file start
+	 * @param unit      compilation unit, e.g. file name
+	 * @param line      line number
+	 * @param column    column number
+	 * @param offset    offset from file start
+	 */
         public Location(String unit, int line, int column, int offset){
 	   this(unit,line,column);
 	   this.offset=offset;
 	}
+	/**
+	 * Location Object
+	 * stores compilation unit, line and column
+	 * @param unit      compilation unit, e.g. file name
+	 * @param line      line number
+	 * @param column    column number
+	 */
         public Location(String unit, int line, int column){
             this.unit=unit;
             this.line=line;
             this.column=column;
         }
+	/**
+	 * Location Object
+	 * stores line, column and offset to the file start
+	 * @param line      line number
+	 * @param column    column number
+	 * @param offset    offset from file start
+	 */
         public Location(int line, int column, int offset){
 	    this(line,column);
 	    this.offset=offset;
 	}
+	/**
+	 * Location Object
+	 * stores line and column 
+	 * @param line      line number
+	 * @param column    column number
+	 */
         public Location(int line, int column){
             this.line=line;
             this.column=column;
         }
+	/**
+	 * getColumn
+	 * @returns column if known, else -1
+	 */
         public int getColumn(){
             return column;
         }
+	/**
+	 * getLine
+	 * @returns line if known, else -1
+	 */
         public int getLine(){
             return line;
         }
+	/**
+	 * getUnit
+	 * @returns compilation unit if known, else 'unknown'
+	 */
         public String getUnit(){
             return unit;
         }
+	/**
+	 * getLine
+	 * @returns line if known, else -1
+	 */
         public String toString(){
             return getUnit()+":"+getLine()+"/"+getColumn()+"("+offset+")";
         }
+	/**
+	 * getOffset
+	 * @returns offset to start if known, else -1
+	 */
         public int getOffset(){
             return offset;
         }
@@ -105,9 +153,19 @@ public class ComplexSymbolFactory implements SymbolFactory{
 
 
     // Factory methods
+    /**
+     * newSymbol
+     * creates a complex symbol with Location objects for left and right boundaries;
+     * this is used for terminals with values!
+     */
     public Symbol newSymbol(String name, int id, Location left, Location right, Object value){
         return new ComplexSymbol(name,id,left,right,value);
     }
+    /**
+     * newSymbol
+     * creates a complex symbol with Location objects for left and right boundaries;
+     * this is used for terminals without values!
+     */
     public Symbol newSymbol(String name, int id, Location left, Location right){
         return new ComplexSymbol(name,id,left,right);
     }
