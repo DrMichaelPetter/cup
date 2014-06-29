@@ -1,0 +1,77 @@
+import java.util.*;
+import java.io.*;
+import java_cup.runtime.Symbol;
+import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
+import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.XMLElement;
+
+/* Preliminaries to use the scanner.  
+   scan with {: return lexer.next_token(); :};*/
+
+
+parser code {: 
+  Lexer lexer;
+
+  public Parser(Lexer lex, ComplexSymbolFactory sf) {
+    super(lex,sf);
+    lexer = lex;
+  }
+:}; 
+
+
+
+/* Terminals (tokens returned by lexer). */
+terminal         SEMICOLON, COMMA, LPAR, RPAR, BEGIN, END;
+terminal         IF, ELSE, WHILE, READ, WRITE, BUNOP, ASSIGN;
+
+terminal Integer TYPE, BINOP, UNOP, COMP, BBINOP;
+terminal Integer INTCONST;
+terminal String  IDENT,STRINGCONST;
+terminal Boolean BOOLCONST;
+
+  
+
+non terminal XMLElement        program, decllist,decl,stmtlist,identlist,stmt,expr,cond;
+
+precedence left ELSE, UNOP, BINOP, BUNOP, BBINOP;
+
+program   ::=  decllist:d stmtlist:s
+    ;
+decllist  ::=  decl:d decllist:dl
+    | /* leere decllist */
+    ;
+stmtlist  ::= stmtlist:sl stmt:s
+    | /* leere stmtlist */
+    ;
+decl ::= TYPE IDENT:i identlist:il  SEMICOLON
+    ;
+identlist  ::= identlist:il COMMA IDENT:i
+    | /* leere identlist*/
+    ;
+stmt ::= SEMICOLON
+    | BEGIN stmtlist:sl END
+    | IDENT:i ASSIGN expr:e SEMICOLON
+    | IDENT:i ASSIGN READ LPAR RPAR SEMICOLON
+    | IDENT:i ASSIGN READ LPAR STRINGCONST:s RPAR SEMICOLON
+    | WRITE LPAR expr:e RPAR SEMICOLON
+    | WRITE LPAR STRINGCONST:s RPAR SEMICOLON
+    | IF LPAR cond:c RPAR stmt:s
+    | IF LPAR cond:c RPAR stmt:t ELSE stmt:e
+    | WHILE LPAR cond:c RPAR stmt:s
+    ;
+cond ::= BOOLCONST:c
+    | LPAR cond:c RPAR
+    | expr:e1 COMP:op expr:e2
+    | BUNOP cond:c
+    | cond:c1 BBINOP:op cond:c2
+    ;
+/* Yes, this grammar does not adhere to precedence of multiplication over addition                             */
+/* This is due to the fact that Helmut presents an ambiguous grammar in the lecture!                           */
+/* Thus I do not think it would be a good idea to encourage the "intuitive" handling of expressions even more! */
+expr ::= IDENT:i
+    | INTCONST:c
+    | LPAR expr:e RPAR
+    | BINOP expr:e
+    | expr:e1 BINOP:op expr:e2
+    ;
+
