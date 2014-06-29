@@ -106,6 +106,7 @@ public class Main {
   /** User option -- should generator generate code for left/right values? */
   protected static boolean lr_values = true;
   protected static boolean locations = false;
+  protected static boolean xmlactions = false;
   /** User option -- should symbols be put in a class or an interface? [CSA]*/
   protected static boolean sym_interface = false;
 
@@ -176,7 +177,8 @@ public class Main {
 	 hackish, yes, but works */
       emit.set_lr_values(lr_values);
       emit.set_locations(locations);
-      /* open output files */
+      emit.set_xmlactions(xmlactions);
+      /* open output set_xmlactionsfiles */
       if (print_progress) System.err.println("Opening files...");
       /* use a buffered version of standard input */
       input_file = new BufferedInputStream(System.in);
@@ -267,7 +269,8 @@ version.title_str + "\n" +
 "    -nowarn        don't warn about useless productions, etc.\n" +
 "    -nosummary     don't print the usual summary of parse states, etc.\n" +
 "    -nopositions   don't propagate the left and right token position values\n" +
-"    -locations      generate handles xleft/xright for symbol positions in actions\n" +
+"    -locations     generate handles xleft/xright for symbol positions in actions\n" +
+"    -xmlactions    make the generated parser yield its parse tree as XML\n" +
 "    -noscanner     don't refer to java_cup.runtime.Scanner\n" +
 "    -progress      print messages to indicate progress of the system\n" +
 "    -time          print time usage summary\n" +
@@ -366,6 +369,7 @@ version.title_str + "\n" +
 	  /* frankf 6/18/96 */
 	  else if (argv[i].equals("-nopositions"))  lr_values = false;
 	  else if (argv[i].equals("-locations"))    locations = true;
+	  else if (argv[i].equals("-xmlactions"))   xmlactions = true;
 	  /* CSA 12/21/97 */
 	  else if (argv[i].equals("-interface"))    sym_interface = true;
 	  /* CSA 23-Jul-1999 */

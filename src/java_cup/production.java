@@ -453,12 +453,13 @@ public class production {
 	  if (!rhs[pos].is_action())
 	    {
 	      part = (symbol_part)rhs[pos];
-
+	      String label;
 	      /* if it has a label, make declaration! */
-	      if (part.label() != null)
+	      if ((label=part.label()) != null || emit._xmlactions)
 		{
+	    	  if (label==null) label=part.the_symbol().name()+pos;
 		  declaration = declaration + 
-		    make_declaration(part.label(), part.the_symbol().stack_type(), 
+		    make_declaration(label, part.the_symbol().stack_type(), 
 				     rhs_len-pos-1);
 		}
 	    }

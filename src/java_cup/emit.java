@@ -211,15 +211,21 @@ public class emit {
   /* frankf 6/18/96 */
   protected static boolean _lr_values;
   protected static boolean _locations;
+  protected static boolean _xmlactions;
 
   /** whether or not to emit code for left and right values */
   public static boolean lr_values() {return _lr_values;}
   public static boolean locations() { return _locations; }
   protected static void set_lr_values(boolean b) { _lr_values = b;}
   protected static void set_locations(boolean b) { _locations = b; }
-
+  protected static void set_xmlactions(boolean b) { _xmlactions = b; 
+ 	if (!b) return;
+ 	_locations=true; 
+ 	_lr_values=true;
+  }
   //Hm Added clear  to clear all static fields
   public static void clear () {
+	  _xmlactions = false;
       _locations = false; 
       _lr_values = true;
       action_code = null;
@@ -906,6 +912,7 @@ public class emit {
 	out.println("import " + import_list.elementAt(i) + ";");
       if (locations())
 	out.println("import java_cup.runtime.ComplexSymbolFactory.Location;");
+  	out.println("import java_cup.runtime.XMLElement;");
 
       /* class header */
       out.println();
@@ -1021,10 +1028,211 @@ public class emit {
       out.println("}");
 
       /* put out the action code class */
-      emit_action_code(out, start_prod);
-
+      if (!_xmlactions)
+    	  emit_action_code(out, start_prod);
+      else
+    	  emit_xmlaction_code(out, start_prod);
       parser_time = System.currentTimeMillis() - start_time;
     }
+/** Emit code for generic XML parsetree output. 
+   * @param out        stream to produce output on.
+   * @param start_prod the start production of the grammar.
+   */
+  protected static void emit_xmlaction_code(PrintWriter out, production start_prod)
+    throws internal_error
+    {
+      production prod;
+
+      long start_time = System.currentTimeMillis();
+
+      /* class header */
+      out.println();
+      out.println(
+       "/** Cup generated class to encapsulate user supplied action code.*/"
+      );  
+      out.println("class " +  pre("actions") + typeArgument() + " {");
+      /* user supplied code */
+      if (action_code != null)
+	{
+	  out.println();
+          out.println(action_code);
+	}
+
+      /* field for parser object */
+      out.println("  private final "+parser_class_name + typeArgument() + " parser;");
+
+      /* constructor */
+      out.println();
+      out.println("  /** Constructor */");
+      out.println("  " + pre("actions") + "("+parser_class_name+typeArgument()+" parser) {");
+      out.println("    this.parser = parser;");
+      out.println("  }");
+
+      out.println();
+      for (int instancecounter = 0; instancecounter <= production.number()/UPPERLIMIT; instancecounter++) {
+      out.println("  /** Method "+instancecounter+" with the actual generated action code for actions "+(instancecounter*UPPERLIMIT)+" to "+((instancecounter+1)*UPPERLIMIT) +". */");
+      out.println("  public final java_cup.runtime.Symbol " + 
+		     pre("do_action_part")+ String.format("%08d",new Integer(instancecounter)) +"(");
+      out.println("    int                        " + pre("act_num,"));
+      out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
+      out.println("    java.util.Stack            " + pre("stack,"));
+      out.println("    int                        " + pre("top)"));
+      out.println("    throws java.lang.Exception");
+      out.println("    {");
+      out.println("      /* Symbol object for return from actions */");
+      out.println("      java_cup.runtime.Symbol " + pre("result") + ";");
+      out.println();
+      out.println("      /* select the action based on the action number */");
+      out.println("      switch (" + pre("act_num") + ")");
+      out.println("        {");
+      // START Switch
+      /* emit action code for each production as a separate case */
+      int proditeration = instancecounter*UPPERLIMIT;
+      prod=production.find(proditeration);
+      for ( ;proditeration<Math.min((instancecounter+1)*UPPERLIMIT,production.number());prod=(production)production.find(++proditeration) )
+	{
+	  /* case label */
+          out.println("          /*. . . . . . . . . . . . . . . . . . . .*/");
+          out.println("          case " + prod.index() + ": // " + 
+					  prod.to_simple_string());
+
+	  /* give them their own block to work in */
+	  out.println("            {");
+
+
+      out.println("                XMLElement RESULT;");
+      
+        /* if there is an action string, emit it */
+          if (prod.action() != null && prod.action().code_string() != null &&
+              !prod.action().equals(""))
+            out.println(prod.action().code_string());
+          // Generate the XML Output
+          String nested="";
+          for (int rhsi=0;rhsi<prod.rhs_length();rhsi++){
+        	  if (!(prod.rhs(rhsi) instanceof symbol_part)) continue;
+        	  String label = prod.rhs(rhsi).label();
+        	  if (label==null) 
+        		  continue;
+        	  symbol_part sym  = (symbol_part)prod.rhs(rhsi);
+        	  if (sym.the_symbol().is_non_term())
+        		  nested+=",(XMLElement)"+label;
+        	  else 
+        		  nested+=",new XMLElement.Terminal("+label+"xleft,\""+label+"\","+label+","+label+"xright)";
+          }
+          
+          out.println("                RESULT = new XMLElement.NonTerminal(\""+
+        		  prod.lhs().the_symbol().name()+"\","+
+        		  prod.index()+nested+");"); 
+          
+          
+         /* Create the code that assigns the left and right values of
+            the new Symbol that the production is reducing to */
+	  if (emit.lr_values()) {	    
+	    int loffset;
+	    String leftstring, rightstring;
+	    rightstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") + ".peek()"+")"; 	  
+	    if (prod.rhs_length() == 0) 
+	      leftstring = rightstring;
+	    else {
+	      loffset = prod.rhs_length() - 1;
+	      leftstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") + 
+		  ((loffset==0)?(".peek()"):(".elementAt(" + emit.pre("top") + "-" + loffset + ")")) +")";
+	    }
+	    out.println("              " + pre("result") + " = parser.getSymbolFactory().newSymbol(" + 
+                        "\""+ 	prod.lhs().the_symbol().name() +"\","+ 
+			prod.lhs().the_symbol().index() + ", " + leftstring + ", " + rightstring + ", RESULT);");
+	  } else {
+	    out.println("              " + pre("result") + " = parser.getSymbolFactory().newSymbol(" + 
+		"\""+ 	prod.lhs().the_symbol().name() +  "\"," + prod.lhs().the_symbol().index() + ", RESULT);");
+	  }
+	  
+	  /* end of their block */
+	  out.println("            }");
+
+	  /* if this was the start production, do action for accept */
+	  if (prod == start_prod)
+	    {
+	      out.println("          /* ACCEPT */");
+	      out.println("          " + pre("parser") + ".done_parsing();");
+	    }
+
+	  /* code to return lhs symbol */
+	  out.println("          return " + pre("result") + ";");
+	  out.println();
+	}
+
+      // END Switch
+      out.println("          /* . . . . . .*/");
+      out.println("          default:");
+      out.println("            throw new Exception(");
+      out.println("               \"Invalid action number \"+"+pre("act_num")+"+\"found in " +
+				  "internal parse table\");");
+      out.println();
+      out.println("        }");
+      out.println("    } /* end of method */");
+      }
+
+      /* action method head */
+      out.println();
+      out.println("  /** Method splitting the generated action code into several parts. */");
+      out.println("  public final java_cup.runtime.Symbol " + 
+		     pre("do_action") + "(");
+      out.println("    int                        " + pre("act_num,"));
+      out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
+      out.println("    java.util.Stack            " + pre("stack,"));
+      out.println("    int                        " + pre("top)"));
+      out.println("    throws java.lang.Exception");
+      out.println("    {");
+
+      if (production.number()<UPPERLIMIT) { // Make it simple for the optimizer to inline!
+	  out.println("              return " + pre("do_action_part")+ String.format("%08d",new Integer(0))+"(");
+	  out.println("                               " + pre("act_num,"));
+	  out.println("                               " + pre("parser,"));
+	  out.println("                               " + pre("stack,"));
+	  out.println("                               " + pre("top);"));
+	  out.println("    }");
+
+	  /* end of class */
+	  out.println("}");
+	  out.println();
+
+	  action_code_time = System.currentTimeMillis() - start_time;
+	  return;
+      }
+
+      /* switch top */
+      out.println("      /* select the action handler based on the action number */");
+      out.println("      switch (" + pre("act_num") + "/"+UPPERLIMIT+ ")");
+      out.println("        {");
+
+      /* emit action code for each production as a separate case */
+      for (int instancecounter = 0; instancecounter <= production.number()/UPPERLIMIT; instancecounter++) {
+	  /* case label */
+          out.println("          /*. . . . . . . . "+(instancecounter*UPPERLIMIT)+" < #action < "+((instancecounter+1)*UPPERLIMIT)+". . . . . . . . . . . .*/");
+          out.println("          case " + instancecounter + ": ");
+	  out.println("              return " + pre("do_action_part")+ String.format("%08d",new Integer(instancecounter))+"(");
+	  out.println("                               " + pre("act_num,"));
+	  out.println("                               " + pre("parser,"));
+	  out.println("                               " + pre("stack,"));
+	  out.println("                               " + pre("top);"));
+      }
+
+      out.println("          /* . . . no valid action number: . . .*/");
+      out.println("          default:");
+      out.println("            throw new Exception(\"Invalid action number found in internal parse table\");");
+      out.println();
+      out.println("        }      /* end of switch */");
+
+      /* end of method */
+      out.println("    }");
+
+      /* end of class */
+      out.println("}");
+      out.println();
+
+      action_code_time = System.currentTimeMillis() - start_time;
+    }
+
 
     /*-----------------------------------------------------------*/
 }

@@ -1,37 +1,20 @@
-import java.util.*;
-import java.io.*;
-import java_cup.runtime.Symbol;
-import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
-import java_cup.runtime.ComplexSymbolFactory;
-import java_cup.runtime.XMLElement;
-
-/* Preliminaries to use the scanner.  
-   scan with {: return lexer.next_token(); :};*/
-
-
+/* Minijava Grammar */
 parser code {: 
-  Lexer lexer;
-
-  public Parser(Lexer lex, ComplexSymbolFactory sf) {
-    super(lex,sf);
-    lexer = lex;
-  }
+//  public Parser(Lexer lex, ComplexSymbolFactory sf) {
+//    super(lex,sf);
+//  }
 :}; 
 
 
 
 /* Terminals (tokens returned by lexer). */
-terminal         SEMICOLON, COMMA, LPAR, RPAR, BEGIN, END;
-terminal         IF, ELSE, WHILE, READ, WRITE, BUNOP, ASSIGN;
+terminal         SEMICOLON, COMMA, LPAR, RPAR, BEGIN, END, IF, ELSE, WHILE, READ, WRITE, BUNOP, ASSIGN;
 
-terminal Integer TYPE, BINOP, UNOP, COMP, BBINOP;
-terminal Integer INTCONST;
+terminal Integer TYPE, BINOP, UNOP, COMP, BBINOP, INTCONST;
 terminal String  IDENT,STRINGCONST;
 terminal Boolean BOOLCONST;
 
-  
-
-non terminal XMLElement        program, decllist,decl,stmtlist,identlist,stmt,expr,cond;
+non terminal program, decllist,decl,stmtlist,identlist,stmt,expr,cond;
 
 precedence left ELSE, UNOP, BINOP, BUNOP, BBINOP;
 
@@ -42,7 +25,7 @@ decllist  ::=  decl:d decllist:dl
     ;
 stmtlist  ::= stmtlist:sl stmt:s
     | /* leere stmtlist */
-    ;
+        ;
 decl ::= TYPE IDENT:i identlist:il  SEMICOLON
     ;
 identlist  ::= identlist:il COMMA IDENT:i
@@ -65,9 +48,6 @@ cond ::= BOOLCONST:c
     | BUNOP cond:c
     | cond:c1 BBINOP:op cond:c2
     ;
-/* Yes, this grammar does not adhere to precedence of multiplication over addition                             */
-/* This is due to the fact that Helmut presents an ambiguous grammar in the lecture!                           */
-/* Thus I do not think it would be a good idea to encourage the "intuitive" handling of expressions even more! */
 expr ::= IDENT:i
     | INTCONST:c
     | LPAR expr:e RPAR

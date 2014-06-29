@@ -21,7 +21,7 @@ public abstract class XMLElement {
 	public static class NonTerminal extends XMLElement {
 		private int variant;
 		LinkedList<XMLElement> list;
-		NonTerminal(String tagname, int variant, XMLElement... l) {
+		public NonTerminal(String tagname, int variant, XMLElement... l) {
 			this.tagname=tagname;
 			this.variant=variant;
 			list = new LinkedList<XMLElement>(Arrays.asList(l));
@@ -73,11 +73,11 @@ public abstract class XMLElement {
 		Location l, r;
 		Object value;
 
-		Terminal(Location l, String symbolname, Location r) {
+		public Terminal(Location l, String symbolname, Location r) {
 			this(l, symbolname, null, r);
 		}
 
-		Terminal(Location l, String symbolname, Object i, Location r) {
+		public Terminal(Location l, String symbolname, Object i, Location r) {
 			this.l = l;
 			this.r = r;
 			this.value = i;
