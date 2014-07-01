@@ -1,8 +1,21 @@
 /* Minijava Grammar */
+import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.XMLElement;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.*;
 parser code {: 
-//  public Parser(Lexer lex, ComplexSymbolFactory sf) {
-//    super(lex,sf);
-//  }
+  public Parser(Lexer lex, ComplexSymbolFactory sf) {
+    super(lex,sf);
+  }
+  public static void main(String[] args) throws Exception {
+      ComplexSymbolFactory csf = new ComplexSymbolFactory();
+      Parser p = new Parser(new Lexer(new BufferedReader(new FileReader(args[0])),csf),csf);
+      XMLElement e = (XMLElement)p.parse().value;
+      XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
+      XMLStreamWriter sw = outFactory.createXMLStreamWriter(new FileOutputStream(args[1]));
+      XMLElement.dump(sw,e);
+  }
 :}; 
 
 

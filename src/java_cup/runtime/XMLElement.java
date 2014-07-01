@@ -1,17 +1,22 @@
 package java_cup.runtime;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
 public abstract class XMLElement {
 	public static void dump(XMLStreamWriter writer, XMLElement elem) throws XMLStreamException {
 		writer.writeStartDocument();
+		writer.writeProcessingInstruction("xml-stylesheet","href=\"tree.xsl\" type=\"text/xsl\"");
 		elem.dump(writer);
 		writer.writeEndDocument();
+		writer.flush();
+		writer.close();
 	}
 	protected String tagname;
 	public abstract Location right();
@@ -27,10 +32,25 @@ public abstract class XMLElement {
 			list = new LinkedList<XMLElement>(Arrays.asList(l));
 		}
 
-		public Location left() {	return list.getFirst().left();	}
-		public Location right() {	return list.getLast().right();	}
+		public Location left() {
+			for (XMLElement e : list){
+				Location loc = e.left();
+				if (loc!=null) return loc;
+			}
+			return null;	
+		}
+		public Location right() {
+			for (Iterator<XMLElement> it = list.descendingIterator();it.hasNext();){
+				 Location loc = it.next().left();
+				 if (loc!=null) return loc;
+			}
+			return null;
+		}
 
 		public String toString() {
+			if (list.isEmpty()){
+				return "<nonterminal id=\"" + tagname +"\" variant=\""+variant+"\" />" ;
+			}
 			String ret = "<nonterminal id=\"" + tagname +"\" left=\"" + left()
 					+ "\" right=\"" + right() + "\" variant=\""+variant+"\">";
 			for (XMLElement e : list)
@@ -42,8 +62,12 @@ public abstract class XMLElement {
 			writer.writeStartElement("nonterminal");
 			writer.writeAttribute("id", tagname);
 			writer.writeAttribute("variant", variant+"");
-			writer.writeAttribute("left", left()+"");
-			writer.writeAttribute("right", right()+"");
+			if (!list.isEmpty()){
+				writer.writeAttribute("left", left()+"");
+				writer.writeAttribute("right", right()+"");
+			}
+			for (XMLElement e:list)
+				e.dump(writer);
 			writer.writeEndElement();
 		}
 	}
@@ -99,6 +123,7 @@ public abstract class XMLElement {
 			writer.writeAttribute("id", tagname);
 			writer.writeAttribute("left", left()+"");
 			writer.writeAttribute("right", right()+"");
+			writer.writeCharacters(value+"");
 			writer.writeEndElement();
 		}
 	}
