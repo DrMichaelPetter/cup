@@ -7,13 +7,61 @@ import java.util.LinkedList;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
 public abstract class XMLElement {
-	public static void dump(XMLStreamWriter writer, XMLElement elem) throws XMLStreamException {
+	public static void dump(XMLStreamWriter writer, XMLElement elem, String ... blacklist) throws XMLStreamException {
+		dump(null,writer,elem,blacklist);
+	}
+	public static void dump(ScannerBuffer buffer, XMLStreamWriter writer, XMLElement elem, String ... blacklist) throws XMLStreamException {
 		writer.writeStartDocument();
 		writer.writeProcessingInstruction("xml-stylesheet","href=\"tree.xsl\" type=\"text/xsl\"");
+		writer.writeStartElement("document");
+		
+		if (blacklist.length>0) {
+			writer.writeStartElement("blacklist");
+			for (String s: blacklist){
+				writer.writeStartElement("symbol");
+				writer.writeCharacters(s);
+				writer.writeEndElement();
+			}
+			writer.writeEndElement();
+		}
+		
+		writer.writeStartElement("parsetree");
 		elem.dump(writer);
+		writer.writeEndElement();
+
+		if (buffer!=null){
+			writer.writeStartElement("tokensequence");
+			for (Symbol s:buffer.getBuffered()){
+				writer.writeStartElement("token");
+				if (s instanceof ComplexSymbol){
+					ComplexSymbol cs = (ComplexSymbol)s;
+					if (cs.value!=null){
+						writer.writeStartElement("token");
+						writer.writeAttribute("name",cs.getName());
+						writer.writeAttribute("left",cs.getLeft()+"");
+						writer.writeAttribute("right",cs.getRight()+"");
+						writer.writeCharacters(cs.value+"");
+						writer.writeEndElement();
+					} else
+					{
+						writer.writeStartElement("keyword");
+						writer.writeAttribute("left",cs.getLeft()+"");
+						writer.writeAttribute("right",cs.getRight()+"");
+						writer.writeCharacters(cs.getName()+"");
+						writer.writeEndElement();
+					}
+				}
+				else 
+					if (s instanceof Symbol) writer.writeCharacters(s.toString());
+				writer.writeEndElement();
+			}
+			writer.writeEndElement();
+		}
+		writer.writeEndElement();
 		writer.writeEndDocument();
 		writer.flush();
 		writer.close();

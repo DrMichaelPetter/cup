@@ -1,5 +1,6 @@
 /* Minijava Grammar */
 import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.ScannerBuffer;
 import java_cup.runtime.XMLElement;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
@@ -10,11 +11,12 @@ parser code {:
   }
   public static void main(String[] args) throws Exception {
       ComplexSymbolFactory csf = new ComplexSymbolFactory();
-      Parser p = new Parser(new Lexer(new BufferedReader(new FileReader(args[0])),csf),csf);
+      ScannerBuffer lexer = new ScannerBuffer(new Lexer(new BufferedReader(new FileReader(args[0])),csf));
+      Parser p = new Parser(lexer,csf);
       XMLElement e = (XMLElement)p.parse().value;
       XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
       XMLStreamWriter sw = outFactory.createXMLStreamWriter(new FileOutputStream(args[1]));
-      XMLElement.dump(sw,e);
+      XMLElement.dump(lexer,sw,e,"expr","stmt");
   }
 :}; 
 

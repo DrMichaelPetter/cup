@@ -115,6 +115,9 @@ public class ComplexSymbolFactory implements SymbolFactory{
             if (xleft==null || xright==null) return "Symbol: "+name;
             return "Symbol: "+name+" ("+xleft+" - "+xright+")";
         }
+        public String getName(){
+        	return name;
+        }
         public ComplexSymbol(String name, int id, int state) {
             super(id,state);
             this.name=name;

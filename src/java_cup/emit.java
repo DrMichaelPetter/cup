@@ -1120,9 +1120,14 @@ public class emit {
         		  nested+=",new XMLElement.Terminal("+label+"xleft,\""+label+"\","+label+","+label+"xright)";
           }
           
+          // determine the variant:
+          int variant=0;
+          for (int i=0;i<proditeration;i++)
+        	  if (production.find(i).lhs().equals(prod.lhs())) variant++;
+          
           out.println("                RESULT = new XMLElement.NonTerminal(\""+
         		  prod.lhs().the_symbol().name()+"\","+
-        		  prod.index()+nested+");"); 
+        		  variant+nested+");"); 
           
           
          /* Create the code that assigns the left and right values of
