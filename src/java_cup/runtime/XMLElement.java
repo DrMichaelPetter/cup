@@ -36,15 +36,14 @@ public abstract class XMLElement {
 		if (buffer!=null){
 			writer.writeStartElement("tokensequence");
 			for (Symbol s:buffer.getBuffered()){
-				writer.writeStartElement("token");
 				if (s instanceof ComplexSymbol){
 					ComplexSymbol cs = (ComplexSymbol)s;
 					if (cs.value!=null){
 						writer.writeStartElement("token");
 						writer.writeAttribute("name",cs.getName());
-						writer.writeAttribute("left",cs.getLeft()+"");
-						writer.writeAttribute("right",cs.getRight()+"");
+						cs.getLeft().toXML(writer, "left");
 						writer.writeCharacters(cs.value+"");
+						cs.getRight().toXML(writer, "right");
 						writer.writeEndElement();
 					} else
 					{
@@ -56,8 +55,11 @@ public abstract class XMLElement {
 					}
 				}
 				else 
-					if (s instanceof Symbol) writer.writeCharacters(s.toString());
-				writer.writeEndElement();
+					if (s instanceof Symbol) {
+						writer.writeStartElement("token");
+						writer.writeCharacters(s.toString());
+						writer.writeEndElement();						
+					}
 			}
 			writer.writeEndElement();
 		}
@@ -110,12 +112,14 @@ public abstract class XMLElement {
 			writer.writeStartElement("nonterminal");
 			writer.writeAttribute("id", tagname);
 			writer.writeAttribute("variant", variant+"");
-			if (!list.isEmpty()){
-				writer.writeAttribute("left", left()+"");
-				writer.writeAttribute("right", right()+"");
-			}
+//			if (!list.isEmpty()){
+				Location loc = left();
+				if (loc!=null) loc.toXML(writer, "left");
+//			}
 			for (XMLElement e:list)
 				e.dump(writer);
+			loc = right();
+			if (loc!=null) loc.toXML(writer, "right");
 			writer.writeEndElement();
 		}
 	}
@@ -171,7 +175,7 @@ public abstract class XMLElement {
 			writer.writeAttribute("id", tagname);
 			writer.writeAttribute("left", left()+"");
 			writer.writeAttribute("right", right()+"");
-			writer.writeCharacters(value+"");
+			if (value!=null) writer.writeCharacters(value+"");
 			writer.writeEndElement();
 		}
 	}

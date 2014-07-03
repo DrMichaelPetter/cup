@@ -212,12 +212,14 @@ public class emit {
   protected static boolean _lr_values;
   protected static boolean _locations;
   protected static boolean _xmlactions;
+  protected static boolean _genericlabels;
 
   /** whether or not to emit code for left and right values */
   public static boolean lr_values() {return _lr_values;}
   public static boolean locations() { return _locations; }
   protected static void set_lr_values(boolean b) { _lr_values = b;}
   protected static void set_locations(boolean b) { _locations = b; }
+  protected static void set_genericlabels(boolean b) { _genericlabels = b; }
   protected static void set_xmlactions(boolean b) { _xmlactions = b; 
  	if (!b) return;
  	_locations=true; 
@@ -225,6 +227,7 @@ public class emit {
   }
   //Hm Added clear  to clear all static fields
   public static void clear () {
+	  _genericlabels = false;
 	  _xmlactions = false;
       _locations = false; 
       _lr_values = true;
@@ -1111,9 +1114,11 @@ public class emit {
           for (int rhsi=0;rhsi<prod.rhs_length();rhsi++){
         	  if (!(prod.rhs(rhsi) instanceof symbol_part)) continue;
         	  String label = prod.rhs(rhsi).label();
-        	  if (label==null) 
-        		  continue;
         	  symbol_part sym  = (symbol_part)prod.rhs(rhsi);
+        	  if (label==null) {
+        		  if (!_genericlabels) continue;
+        		  label = sym.the_symbol().name()+rhsi;
+        	  }
         	  if (sym.the_symbol().is_non_term())
         		  nested+=",(XMLElement)"+label;
         	  else 

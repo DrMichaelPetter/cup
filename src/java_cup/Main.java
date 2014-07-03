@@ -107,6 +107,8 @@ public class Main {
   protected static boolean lr_values = true;
   protected static boolean locations = false;
   protected static boolean xmlactions = false;
+  protected static boolean genericlabels = false;
+  
   /** User option -- should symbols be put in a class or an interface? [CSA]*/
   protected static boolean sym_interface = false;
 
@@ -178,6 +180,7 @@ public class Main {
       emit.set_lr_values(lr_values);
       emit.set_locations(locations);
       emit.set_xmlactions(xmlactions);
+      emit.set_genericlabels(genericlabels);
       /* open output set_xmlactionsfiles */
       if (print_progress) System.err.println("Opening files...");
       /* use a buffered version of standard input */
@@ -271,6 +274,7 @@ version.title_str + "\n" +
 "    -nopositions   don't propagate the left and right token position values\n" +
 "    -locations     generate handles xleft/xright for symbol positions in actions\n" +
 "    -xmlactions    make the generated parser yield its parse tree as XML\n" +
+"    -genericlabels automatically generate labels to all symbols in XML mode\n" +
 "    -noscanner     don't refer to java_cup.runtime.Scanner\n" +
 "    -progress      print messages to indicate progress of the system\n" +
 "    -time          print time usage summary\n" +
@@ -370,6 +374,7 @@ version.title_str + "\n" +
 	  else if (argv[i].equals("-nopositions"))  lr_values = false;
 	  else if (argv[i].equals("-locations"))    locations = true;
 	  else if (argv[i].equals("-xmlactions"))   xmlactions = true;
+	  else if (argv[i].equals("-genericlabels"))   genericlabels = true;
 	  /* CSA 12/21/97 */
 	  else if (argv[i].equals("-interface"))    sym_interface = true;
 	  /* CSA 23-Jul-1999 */

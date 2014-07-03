@@ -56,6 +56,8 @@ public class CUPTask extends Task
     private boolean time=false;
     private boolean debug=false;
     private boolean nopositions=false;
+    private boolean xmlactions=false;
+    private boolean genericlabels=false;
     private boolean locations=true;
     private boolean noscanner=false;
     private boolean force=false;
@@ -91,6 +93,8 @@ public class CUPTask extends Task
 	if (debug)         {  sc.add("-debug"); }
 	if (nopositions)   {  sc.add("-nopositions"); }
 	if (locations)     {  sc.add("-locations"); }
+	if (genericlabels) {  sc.add("-genericlabels"); }
+	if (xmlactions)    {  sc.add("-xmlactions"); }
 	if (noscanner)     {  sc.add("-noscanner"); }
 	if (!quiet) log ("This is "+version.title_str);
         if (!quiet) log ("Authors : "+version.author_str);
@@ -161,23 +165,6 @@ public class CUPTask extends Task
             log("CUP error occured int CUP task: "+e);
         }
 	
-	// this is a dirty hack to determine the apropriate class path
-//	URL url = CUPTask.class.getResource("/java_cup/Main.class");
-//	String path = url.getPath().substring(0,url.getPath().length()-20);
-//	// if called from a .jar or .zip remove the last "!"
-//	if (path.endsWith("!")) path=path.substring(0,path.length()-1);
-//	createClasspath().setPath(path);
-//
-//	setFailonerror(true);
-//	setFork(true);
-//	
-
-	// here, we prepare for calling CUP
-//	setClassname("java_cup.Main");
-	
-	// let's call CUP
-//	super.execute();
-
     }
 
     /**
@@ -615,6 +602,22 @@ public class CUPTask extends Task
     public void setNoscanner(boolean argNoscanner){
 	this.noscanner = argNoscanner;
     }
+
+	public boolean isXmlactions() {
+		return xmlactions;
+	}
+
+	public void setXmlactions(boolean xmlactions) {
+		this.xmlactions = xmlactions;
+	}
+
+	public boolean isGenericlabels() {
+		return genericlabels;
+	}
+
+	public void setGenericlabels(boolean genericlabels) {
+		this.genericlabels = genericlabels;
+	}
 
 
 }

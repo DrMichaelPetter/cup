@@ -1,5 +1,8 @@
 package java_cup.runtime;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
 /**
  * Default Implementation for SymbolFactory, creates
  * plain old Symbols
@@ -24,7 +27,7 @@ public class ComplexSymbolFactory implements SymbolFactory{
 	 * @param column    column number
 	 * @param offset    offset from file start
 	 */
-        public Location(String unit, int line, int column, int offset){
+    public Location(String unit, int line, int column, int offset){
 	   this(unit,line,column);
 	   this.offset=offset;
 	}
@@ -88,6 +91,21 @@ public class ComplexSymbolFactory implements SymbolFactory{
 	 */
         public String toString(){
             return getUnit()+":"+getLine()+"/"+getColumn()+"("+offset+")";
+        }
+        /**
+         * Writes the location information directly into an XML document
+         * @param writer the destination XML Document
+         * @param orientation adds details about the orientation of this location as an attribute; often used with the strings "left" or "right"
+         * @throws XMLStreamException
+         */
+        public void toXML(XMLStreamWriter writer,String orientation) throws XMLStreamException {
+        	writer.writeStartElement("location");
+        	writer.writeAttribute("compilationunit", unit);
+        	writer.writeAttribute("orientation", orientation);
+        	writer.writeAttribute("linenumber", line+"");
+        	writer.writeAttribute("columnnumber", column+"");
+        	writer.writeAttribute("offset", offset+"");
+        	writer.writeEndElement();
         }
 	/**
 	 * getOffset

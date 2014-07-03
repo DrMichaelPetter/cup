@@ -33,40 +33,40 @@ non terminal program, decllist,decl,stmtlist,identlist,stmt,expr,cond;
 
 precedence left ELSE, UNOP, BINOP, BUNOP, BBINOP;
 
-program   ::=  decllist:d stmtlist:s
+program   ::=  decllist stmtlist
     ;
-decllist  ::=  decl:d decllist:dl
-    | /* leere decllist */
+decllist  ::=  decl decllist
+    | 
     ;
-stmtlist  ::= stmtlist:sl stmt:s
-    | /* leere stmtlist */
+stmtlist  ::= stmtlist stmt
+    | 
         ;
-decl ::= TYPE IDENT:i identlist:il  SEMICOLON
+decl ::= TYPE IDENT identlist  SEMICOLON
     ;
-identlist  ::= identlist:il COMMA IDENT:i
-    | /* leere identlist*/
+identlist  ::= identlist COMMA IDENT
+    | 
     ;
 stmt ::= SEMICOLON
-    | BEGIN stmtlist:sl END
-    | IDENT:i ASSIGN expr:e SEMICOLON
-    | IDENT:i ASSIGN READ LPAR RPAR SEMICOLON
-    | IDENT:i ASSIGN READ LPAR STRINGCONST:s RPAR SEMICOLON
-    | WRITE LPAR expr:e RPAR SEMICOLON
-    | WRITE LPAR STRINGCONST:s RPAR SEMICOLON
-    | IF LPAR cond:c RPAR stmt:s
-    | IF LPAR cond:c RPAR stmt:t ELSE stmt:e
-    | WHILE LPAR cond:c RPAR stmt:s
+    | BEGIN stmtlist END
+    | IDENT ASSIGN expr SEMICOLON
+    | IDENT ASSIGN READ LPAR RPAR SEMICOLON
+    | IDENT ASSIGN READ LPAR STRINGCONST RPAR SEMICOLON
+    | WRITE LPAR expr RPAR SEMICOLON
+    | WRITE LPAR STRINGCONST RPAR SEMICOLON
+    | IF LPAR cond RPAR stmt
+    | IF LPAR cond RPAR stmt ELSE stmt
+    | WHILE LPAR cond RPAR stmt
     ;
-cond ::= BOOLCONST:c
-    | LPAR cond:c RPAR
-    | expr:e1 COMP:op expr:e2
-    | BUNOP cond:c
-    | cond:c1 BBINOP:op cond:c2
+cond ::= BOOLCONST
+    | LPAR cond RPAR
+    | expr COMP expr
+    | BUNOP cond
+    | cond BBINOP cond
     ;
-expr ::= IDENT:i
-    | INTCONST:c
-    | LPAR expr:e RPAR
-    | BINOP expr:e
-    | expr:e1 BINOP:op expr:e2
+expr ::= IDENT
+    | INTCONST
+    | LPAR expr RPAR
+    | BINOP expr
+    | expr BINOP expr
     ;
 
