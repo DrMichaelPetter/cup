@@ -15,7 +15,7 @@ public abstract class XMLElement {
 		dump(null,writer,elem,blacklist);
 	}
 	public static void dump(ScannerBuffer buffer, XMLStreamWriter writer, XMLElement elem, String ... blacklist) throws XMLStreamException {
-		writer.writeStartDocument();
+		writer.writeStartDocument("utf-8", "1.0");
 		writer.writeProcessingInstruction("xml-stylesheet","href=\"tree.xsl\" type=\"text/xsl\"");
 		writer.writeStartElement("document");
 		

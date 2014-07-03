@@ -1130,8 +1130,9 @@ public class emit {
           for (int i=0;i<proditeration;i++)
         	  if (production.find(i).lhs().equals(prod.lhs())) variant++;
           
+          String lhsname =prod.lhs().the_symbol().name().replace('$','_'); 
           out.println("                RESULT = new XMLElement.NonTerminal(\""+
-        		  prod.lhs().the_symbol().name()+"\","+
+        		  lhsname+"\","+
         		  variant+nested+");"); 
           
           

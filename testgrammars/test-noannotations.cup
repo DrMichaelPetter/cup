@@ -4,6 +4,10 @@ import java_cup.runtime.ScannerBuffer;
 import java_cup.runtime.XMLElement;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
+
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
+
 import java.io.*;
 parser code {: 
   public Parser(Lexer lex, ComplexSymbolFactory sf) {
@@ -17,6 +21,10 @@ parser code {:
       XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
       XMLStreamWriter sw = outFactory.createXMLStreamWriter(new FileOutputStream(args[1]));
       XMLElement.dump(lexer,sw,e,"expr","stmt");
+      
+      Transformer transformer =  TransformerFactory.newInstance().newTransformer(new StreamSource(new File("tree.xsl")));
+      Source text = new StreamSource(new File(args[1]));
+      transformer.transform(text, new StreamResult(new File("output.html")));
   }
 :}; 
 

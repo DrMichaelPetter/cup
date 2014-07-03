@@ -5,24 +5,27 @@ import java_cup.runtime.XMLElement;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.*;
+
 parser code {: 
   public Parser(Lexer lex, ComplexSymbolFactory sf) {
     super(lex,sf);
   }
   public static void main(String[] args) throws Exception {
+      // initialize the symbol factory
       ComplexSymbolFactory csf = new ComplexSymbolFactory();
+      // create a buffering scanner wrapper
       ScannerBuffer lexer = new ScannerBuffer(new Lexer(new BufferedReader(new FileReader(args[0])),csf));
+      // start parsing
       Parser p = new Parser(lexer,csf);
       XMLElement e = (XMLElement)p.parse().value;
+      // create XML output file 
       XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
       XMLStreamWriter sw = outFactory.createXMLStreamWriter(new FileOutputStream(args[1]));
+      // dump XML output to the file
       XMLElement.dump(lexer,sw,e,"expr","stmt");
   }
 :}; 
 
-
-
-/* Terminals (tokens returned by lexer). */
 terminal         SEMICOLON, COMMA, LPAR, RPAR, BEGIN, END, IF, ELSE, WHILE, READ, WRITE, BUNOP, ASSIGN;
 
 terminal Integer TYPE, BINOP, UNOP, COMP, BBINOP, INTCONST;
@@ -36,15 +39,15 @@ precedence left ELSE, UNOP, BINOP, BUNOP, BBINOP;
 program   ::=  decllist:d stmtlist:s
     ;
 decllist  ::=  decl:d decllist:dl
-    | /* leere decllist */
+    | /* empty */
     ;
 stmtlist  ::= stmtlist:sl stmt:s
-    | /* leere stmtlist */
+    | /* empty */
         ;
 decl ::= TYPE IDENT:identifier identlist:il  SEMICOLON
     ;
 identlist  ::= identlist:il COMMA IDENT:identifier
-    | /* leere identlist*/
+    | /* empty */
     ;
 stmt ::= SEMICOLON
     | BEGIN stmtlist:sl END
