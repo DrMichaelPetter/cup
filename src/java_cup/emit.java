@@ -1105,10 +1105,7 @@ public class emit {
 
       out.println("                XMLElement RESULT;");
       
-        /* if there is an action string, emit it */
-          if (prod.action() != null && prod.action().code_string() != null &&
-              !prod.action().equals(""))
-            out.println(prod.action().code_string());
+
           // Generate the XML Output
           String nested="";
           for (int rhsi=0;rhsi<prod.rhs_length();rhsi++){
@@ -1124,6 +1121,10 @@ public class emit {
         	  else 
         		  nested+=",new XMLElement.Terminal("+label+"xleft,\""+label+"\","+label+","+label+"xright)";
           }
+          
+          if (prod.action() != null && prod.action().code_string() != null &&
+                  !prod.action().equals(""))
+                out.println(prod.action().code_string());
           
           // determine the variant:
           int variant=0;

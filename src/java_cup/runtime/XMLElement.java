@@ -11,6 +11,7 @@ import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
 public abstract class XMLElement {
+	public abstract XMLElement selectById(String s);
 	public static void dump(XMLStreamWriter writer, XMLElement elem, String ... blacklist) throws XMLStreamException {
 		dump(null,writer,elem,blacklist);
 	}
@@ -74,6 +75,19 @@ public abstract class XMLElement {
 	protected abstract void dump(XMLStreamWriter writer) throws XMLStreamException;
 
 	public static class NonTerminal extends XMLElement {
+		@Override
+		public XMLElement selectById(String s) {
+			LinkedList<XMLElement> response= new LinkedList<XMLElement>();
+			for (XMLElement e : list){
+				e=e.selectById(s);
+				if (e!=null) response.add(e);
+			}
+			if (response.size()==0)
+				return null;
+			if (response.size()==1)
+				return response.getFirst();
+			return new NonTerminal(tagname, variant,response.toArray(new XMLElement[0]));
+		}
 		private int variant;
 		LinkedList<XMLElement> list;
 		public NonTerminal(String tagname, int variant, XMLElement... l) {
@@ -125,6 +139,10 @@ public abstract class XMLElement {
 	}
 
 	public static class Error extends XMLElement {
+		@Override
+		public XMLElement selectById(String s) {
+			return null;
+		}
 		Location l,r;
 		public Error(Location l, Location r) {
 			this.l=l;
@@ -146,6 +164,10 @@ public abstract class XMLElement {
 	}
 	
 	public static class Terminal extends XMLElement {
+		public XMLElement selectById(String s) {
+			if (tagname.equals(s)) return this;
+			return null;
+		};
 		Location l, r;
 		Object value;
 
@@ -160,6 +182,7 @@ public abstract class XMLElement {
 			this.tagname = symbolname;
 		}
 
+		public Object   value() {return value; }
 		public Location left() {	return l; 	}
 		public Location right() {	return r;	}
 
