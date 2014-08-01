@@ -187,15 +187,7 @@ public class terminal_set {
      throws internal_error
      {
        not_null(other);
-
-       /* make a copy of the other set */
-       BitSet copy = (BitSet)other._elements.clone();
-
-       /* xor out our values */
-       copy.xor(this._elements);
-
-       /* see if its different */
-       return !copy.equals(other._elements);
+       return _elements.intersects(other._elements);
      }
 
   /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . .*/
