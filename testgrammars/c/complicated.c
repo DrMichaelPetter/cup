@@ -26,6 +26,12 @@ int volatile long main2(int *d, int b){
 }
 int innerdef;
 
+typedef struct point {
+  int j;
+  int k;
+} p;
+p pi;
+
 void help(int short b){} 
 int bla2 = 6;
 int bla6 = 5;
@@ -34,7 +40,9 @@ int vec[][12][5];
 long int ass,aai,bb;
 
 
-typedef volatile int *bla32;
+typedef volatile int *bla32,bla64=z;
+// z testvar3; is rejected!
+bla64 testvar2;
 bla32 testvar;
 bla32 beispiel23();
 

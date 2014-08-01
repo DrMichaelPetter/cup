@@ -16,15 +16,23 @@
 <xsl:template match="nonterminal" mode="flatten">
   <xsl:variable name="temp" select="@id" />
   <xsl:choose>
+    <!-- collapses unary productions, when suffix is "_expression"-->
+    <xsl:when test="count(*)=3 and contains($temp,'expression') and *[contains(@id,'expression')]"> 
+      <xsl:apply-templates  mode="flatten"/>
+    </xsl:when>
+
     <!-- collapses degenerated trees like lists, conserving the blacklist subtrees-->
     <xsl:when test="../@id = @id and count(/document/blacklist[1]/symbol[text() = $temp])=0"> 
       <xsl:apply-templates  mode="flatten"/>
     </xsl:when>
 
     <!-- collapses unary productions -->
-    <xsl:when test="count(*)=1 and count(/document/blacklist[1]/symbol[text() = $temp])=0"> 
+    <!--xsl:when test="count(*)=3 and count(/document/blacklist[1]/symbol[text() = $temp])=0"> 
       <xsl:apply-templates  mode="flatten"/>
-    </xsl:when>
+    </xsl:when-->
+
+
+
 
     <xsl:otherwise>
       <xsl:element name="{@id}" >

@@ -1,5 +1,6 @@
 import java.io.*;
 import java_cup.runtime.ComplexSymbolFactory;
+import java_cup.runtime.Symbol;
 import java_cup.runtime.ScannerBuffer;
 import java.util.*;
 import java_cup.runtime.XMLElement;
@@ -11,6 +12,9 @@ import javax.xml.transform.*;
 import javax.xml.transform.stream.*;    
 
 parser code {:
+    public void syntax_error(Symbol cur_token){
+	System.err.println("Syntax error at "+cur_token);
+    }
     public static void newScope(){
 	typenames.push(new HashSet<String>());
     }
@@ -261,7 +265,8 @@ declaration
 	::=declaration_specifiers:ds SEMI
     | declaration_specifiers:ds init_declarator_list:idl {: 
 							  if (ds.toString().indexOf(">typedef<")>0) {
-							      Parser.addType(((Terminal)((XMLElement)idl).selectById("identifier")).value().toString());
+							      for (XMLElement e: ((XMLElement)idl).selectById("identifier"))
+								Parser.addType(((Terminal)e).value().toString());
 							  }
 							  :} SEMI
         ;
@@ -366,8 +371,8 @@ type_qualifier
 	;
 
 declarator
-	::=pointer:p direct_declarator:d 
-	| direct_declarator:d
+	::=pointer:p direct_declarator:direct 
+	| direct_declarator:direct
 	;
 
 direct_declarator 
