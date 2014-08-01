@@ -747,9 +747,10 @@ public class lalr_state {
 		    }
 		}
 	      /* report S/R conflicts under all the symbols we conflict under */
+	      terminal_set lookahead = itm.lookahead(); 
 	      for (int t = 0; t < terminal.number(); t++)
-		if (conflict_set.contains(t))
-		  report_shift_reduce(itm,t);
+	    	  if (conflict_set.contains(t) && lookahead.contains(t))
+	    		  report_shift_reduce(itm,t);
 	    }
 	}
     }
