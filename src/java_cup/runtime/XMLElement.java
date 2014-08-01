@@ -1,8 +1,10 @@
 package java_cup.runtime;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -11,7 +13,7 @@ import java_cup.runtime.ComplexSymbolFactory.ComplexSymbol;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
 public abstract class XMLElement {
-	public abstract XMLElement selectById(String s);
+	public abstract List<XMLElement> selectById(String s);
 	public static void dump(XMLStreamWriter writer, XMLElement elem, String ... blacklist) throws XMLStreamException {
 		dump(null,writer,elem,blacklist);
 	}
@@ -76,17 +78,15 @@ public abstract class XMLElement {
 
 	public static class NonTerminal extends XMLElement {
 		@Override
-		public XMLElement selectById(String s) {
+		public List<XMLElement> selectById(String s) {
 			LinkedList<XMLElement> response= new LinkedList<XMLElement>();
+			if (tagname.equals(s))
+				response.add(this);
 			for (XMLElement e : list){
-				e=e.selectById(s);
-				if (e!=null) response.add(e);
+				List<XMLElement> selection =e.selectById(s);
+				response.addAll(selection);
 			}
-			if (response.size()==0)
-				return null;
-			if (response.size()==1)
-				return response.getFirst();
-			return new NonTerminal(tagname, variant,response.toArray(new XMLElement[0]));
+			return response;
 		}
 		private int variant;
 		LinkedList<XMLElement> list;
@@ -140,8 +140,8 @@ public abstract class XMLElement {
 
 	public static class Error extends XMLElement {
 		@Override
-		public XMLElement selectById(String s) {
-			return null;
+		public List<XMLElement> selectById(String s) {
+			return new LinkedList<XMLElement>();
 		}
 		Location l,r;
 		public Error(Location l, Location r) {
@@ -164,9 +164,10 @@ public abstract class XMLElement {
 	}
 	
 	public static class Terminal extends XMLElement {
-		public XMLElement selectById(String s) {
-			if (tagname.equals(s)) return this;
-			return null;
+		public List<XMLElement> selectById(String s) {
+			List<XMLElement> ret = new LinkedList<XMLElement>();
+			if (tagname.equals(s)) { ret.add(this);	}
+			return ret;
 		};
 		Location l, r;
 		Object value;
