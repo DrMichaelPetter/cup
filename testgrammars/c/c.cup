@@ -141,25 +141,25 @@ precedence nonassoc ELSE;
 start with translation_unit;
 
 
-primary_expression ::= IDENTIFIER:id 
-		   | CONSTANT:c 
-		   | STRING_LITERAL:sl  
+primary_expression ::= IDENTIFIER:ident
+		   | CONSTANT:constant 
+		   | STRING_LITERAL:stringliteral  
 		   | PARAL expression:e PARAR 
 		   ;
 
 postfix_expression ::= primary_expression:pe 
-		   | postfix_expression:pe SQUAREDL expression:e SQUAREDR 
+		   | postfix_expression:pe SQUAREDL expression:index SQUAREDR 
 		   | postfix_expression:pe PARAL PARAR 
 		   | postfix_expression:pe PARAL expression:e PARAR 
 		   | postfix_expression:pe POINT IDENTIFIER:id
 		   | postfix_expression:pe PTR_OP IDENTIFIER:id
-		   | postfix_expression:pe INC_OP
-		   | postfix_expression:pe DEC_OP
+		   | postfix_expression:pe INC_OP:op
+		   | postfix_expression:pe DEC_OP:op
 		   ;
 
 unary_expression ::= postfix_expression:pe 
-		 | INC_OP unary_expression:ue
-		 | DEC_OP unary_expression:ue
+		 | INC_OP:op unary_expression:ue
+		 | DEC_OP:op unary_expression:ue
 		 | unary_operator:uo cast_expression:ce
 		 | SIZEOF unary_expression:ue
 		 | SIZEOF PARAL type_name:tn PARAR
@@ -167,11 +167,11 @@ unary_expression ::= postfix_expression:pe
 
 unary_operator
 	::=ADRESS
-	| MUL
-	| PLUS
-	| MINUS
+	| MUL:op
+	| PLUS:op
+	| MINUS:op
 	| TILDE
-	| NOT
+	| NOT:op
 	;
 
 
@@ -182,14 +182,14 @@ cast_expression
 
 
 multiplicative_expression ::= cast_expression:ce 
-			  | multiplicative_expression:me MUL cast_expression:ce
-			  | multiplicative_expression:me DIVIDE cast_expression:ce
-			  | multiplicative_expression:me MODULUS cast_expression:ce
+			  | multiplicative_expression:me MUL:op cast_expression:ce
+			  | multiplicative_expression:me DIVIDE:op cast_expression:ce
+			  | multiplicative_expression:me MODULUS:op cast_expression:ce
 			  ;
 
 additive_expression ::= multiplicative_expression:me
-		    | additive_expression:ae PLUS multiplicative_expression:me
-		    | additive_expression:ae MINUS multiplicative_expression:me
+		    | additive_expression:ae PLUS:op multiplicative_expression:me
+		    | additive_expression:ae MINUS:op multiplicative_expression:me
 		    ;
 
 shift_expression ::= additive_expression:ae
@@ -198,15 +198,15 @@ shift_expression ::= additive_expression:ae
 		 ;
 
 relational_expression ::= shift_expression:se
-		      | relational_expression:re LESS shift_expression:se
-		      | relational_expression:re GREATER shift_expression:se
-		      | relational_expression:re LE_OP shift_expression:se
-		      | relational_expression:re GE_OP shift_expression:se
+		      | relational_expression:re LESS:op shift_expression:se
+		      | relational_expression:re GREATER:op shift_expression:se
+		      | relational_expression:re LE_OP:op shift_expression:se
+		      | relational_expression:re GE_OP:op shift_expression:se
 		      ;
 
 equality_expression ::= relational_expression:re
-		    | equality_expression:ee EQ_OP relational_expression:re
-		    | equality_expression:ee NE_OP relational_expression:re
+		    | equality_expression:ee EQ_OP:op relational_expression:re
+		    | equality_expression:ee NE_OP:op relational_expression:re
 		    ;
 
 and_expression ::= equality_expression:ee
@@ -223,11 +223,11 @@ inclusive_or_expression	::= exclusive_or_expression:eoe
 			;
 
 logical_and_expression ::= inclusive_or_expression:ioe
-		       | logical_and_expression:lae AND_OP inclusive_or_expression:ioe
+		       | logical_and_expression:lae AND_OP:op inclusive_or_expression:ioe
 		       ;
 
 logical_or_expression ::= logical_and_expression:lae
-		      | logical_or_expression:loe OR_OP logical_and_expression:lae
+		      | logical_or_expression:loe OR_OP:op logical_and_expression:lae
 		      ;
 
 conditional_expression ::= logical_or_expression:loe
@@ -299,18 +299,18 @@ storage_class_specifier
 	;
  
 type_specifier
-	::=VOID:id
-	| CHAR:id 
-	| SHORT:id
-	| INT:id     
-	| LONG:id    
-	| FLOAT:id   
-	| DOUBLE:id 
-	| SIGNED:id 
-	| UNSIGNED:id 
+	::=VOID:type
+	| CHAR:type
+	| SHORT:type
+	| INT:type
+	| LONG:type
+	| FLOAT:type
+	| DOUBLE:type
+	| SIGNED:type
+	| UNSIGNED:type
 	| struct_or_union_specifier:su
 	| enum_specifier:es
-	| TYPE_NAME:id
+	| TYPE_NAME:type
 	;
 
 struct_or_union_specifier
@@ -377,12 +377,12 @@ declarator
 
 direct_declarator 
 	::=IDENTIFIER:identifier 
-	| PARAL:id declarator:d PARAR 
-	| direct_declarator:dd SQUAREDL:id constant_expression:ce SQUAREDR 
-	| direct_declarator:dd SQUAREDL:id SQUAREDR  
-	| direct_declarator:dd PARAL:id parameter_type_list:ptl PARAR  
-	| direct_declarator:dd PARAL:id identifier_list:il PARAR 
-	| direct_declarator:dd PARAL:id PARAR
+	| PARAL declarator:d PARAR 
+	| direct_declarator:dd SQUAREDL constant_expression:ce SQUAREDR 
+	| direct_declarator:dd SQUAREDL SQUAREDR  
+	| direct_declarator:dd PARAL parameter_type_list:ptl PARAR  
+	| direct_declarator:dd PARAL identifier_list:il PARAR 
+	| direct_declarator:dd PARAL PARAR
 	;
 
 pointer
