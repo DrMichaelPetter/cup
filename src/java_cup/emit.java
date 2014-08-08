@@ -926,6 +926,11 @@ public class emit {
       out.println("public class " + parser_class_name + typeArgument() +
 		  " extends java_cup.runtime.lr_parser {");
 
+      out.println();
+      out.println(" public final Class getSymbolContainer() {");
+      out.println("    return sym.class;");
+      out.println("}");
+      
       /* constructors [CSA/davidm, 24-jul-99] */
       out.println();
       out.println("  /** Default constructor. */");
