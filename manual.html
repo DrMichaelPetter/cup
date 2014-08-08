@@ -1,6 +1,6 @@
 <html><head>
 <title>CUP User's Manual</title></head><body>
-
+<div class="container">
 <hr>
 <h1>CUP User's Manual</h1>
 <h3><a href="http://www.cc.gatech.edu/gvu/people/Faculty/Scott.E.Hudson.html">
@@ -267,12 +267,12 @@ symbols in the right hand side of productions.  For example in:<br>
 <pre>  expr:e1 PLUS expr:e2    
 	{: RESULT = new Integer(e1.intValue() + e2.intValue()); :} 
 </pre>
-<a name="RES_part">
+<a name="RES_part"></a>
 the first non-terminal <tt>expr</tt> has been labeled with <tt>e1</tt>, and 
 the second with <tt>e2</tt>.  The left hand side value 
 of each production is always implicitly labeled as <tt>RESULT</tt>.</a><p>
 
-<a name="RES_part">Each symbol appearing in a production is represented at runtime by an
+<a name="RES_part" ></a>Each symbol appearing in a production is represented at runtime by an
 object of type <tt>Symbol</tt> on the parse stack.  The labels refer to
 the instance variable <tt>value</tt> in those objects.  In the
 expression <tt>expr:e1 PLUS expr:e2</tt>, <tt>e1</tt> and <tt>e2</tt>
@@ -755,7 +755,19 @@ by passing various options to it.  Legal options are documented in
       computation to not generate these position propagations.  This option
       also keeps the left and right label variables from being generated, so
       any reference to these will cause an error.
-
+  </dd><dt><tt>-locations</tt>          
+  </dt><dd>This option makes CUP generate xleft/xright handles for
+      accessing Location objects for symbol start/end inside actions.
+  </dd><dt><tt>-xmlactions</tt>          
+  </dt><dd>This option makes CUP generate generic actions that produce
+      XMLElement-objects for any symbol, that is labeled by the CUP spec
+      author. These objects directly mirror the according parse subtree. For this
+      option, You will want to remove types from any symbol as well as
+      ignore the RESULT-handle in any action, should you still want
+      to perform any.
+  </dd><dt><tt>-genericlabels</tt>          
+  </dt><dd>This option goes one step further then -xmlactions by producing
+      the full parse tree as XMLElement-tree.
   </dd><dt><tt>-noscanner</tt>
   </dt><dd>CUP 0.10j introduced <a href="#scanner">improved scanner
   integration</a> and a new interface,
@@ -848,7 +860,7 @@ available for customization include:
 </dt><dd>This method is called by the parser prior to asking for the first token 
     from the scanner.  The body of this method contains the code from the 
     <tt>init with</tt> clause of the the specification.  
-</dd><dt><a name="scan_method"><tt>public java_cup.runtime.Symbol scan()</tt></a>
+</dd><dt><a name="scan_method"></a><tt>public java_cup.runtime.Symbol scan()</tt>
 </dt><dd>This method encapsulates the scanner and is called each time a new
     terminal is needed by the parser.  The body of this method is 
     supplied by the <tt>scan with</tt> clause of the specification, if
@@ -870,6 +882,19 @@ available for customization include:
     by calling the parser method <tt>done_parsing()</tt>, and finally
     throws an exception.  (In general <tt>done_parsing()</tt> should be called 
     at any point that parsing needs to be terminated early).
+</dd><dt><tt>public List<Integer> expected_token_ids()</tt>
+</dt><dd>This method informs during parsing and especially when handling
+    parsing problems and invalid input about valid continuations for parsing.
+    It returns a list of integer constants which correspond to the constants
+    in the generated <tt>sym.java</tt>. You can retranslate the ids to their
+    string representations, which where used in the grammar specification to
+    declare (non)terminal names, with <tt>symbol_name_from_id(id)</tt>
+    This can be typically used to implement syntax completion or more detailed
+    error messages.
+</dd><dt><tt>public String symbol_name_from_id(int id)</tt>
+</dt><dd>This method translates numerical constants, representing symbol ids 
+    back to their textual representation, declared in the <tt>.cup</tt>
+    parser specification file.
 </dd><dt><tt>public void syntax_error(Symbol cur_token)</tt>
 </dt><dd>This method is called by the parser as soon as a syntax error is detected
     (but before error recovery is attempted).  In the default implementation it
@@ -996,7 +1021,7 @@ generated parser.<p>
 The simple_calc example in the CUP distribution illustrates the use of
 the scanner integration features with a hand-coded scanner.</p><p>
 
-<a name="advanced-symbols" />
+<a name="advanced-symbols"></a>
 <h4>5.2 Advanced Symbol management</h4>
 
 <p>Since CUP v11a we offer the possibility of advanced symbol handling in CUP.
@@ -1047,8 +1072,8 @@ of the AST, we would expect a recursive function, that computes the locations fo
 intermediary node in the tree.
 </p>
 
-<a name="errors" />
-<h3>6. Error Recovery</h3></a>
+<a name="errors"></a>
+<h3>6. Error Recovery</h3>
 
 A final important aspect of building parsers with CUP is 
 support for syntactic error recovery.  CUP uses the same 
@@ -1099,8 +1124,8 @@ input is reached without making a successful recovery (or there was no
 suitable error recovery state found on the parse stack to begin with)
 then error recovery fails.
 
-<a name="conclusion">
-<h3>7. Conclusion</h3></a>
+<a name="conclusion"></a>
+<h3>7. Conclusion</h3>
 
 This manual has briefly described the CUP LALR parser generation system.
 CUP is designed to fill the same role as the well known YACC parser
@@ -1134,8 +1159,8 @@ On-going improvements have been done by
 C. Scott Ananian</a>, the CUP maintainer, from December of 1997 to the
 present.</p><p>
 
-<a name="refs">
-<h3>References</h3></a>
+<a name="refs"></a>
+<h3>References</h3>
 </p><dl compact="compact">
 
 <dt><a name="YACCref">[1]</a> 
@@ -1162,7 +1187,7 @@ Redwood City, CA,
 
 </dd></dl>
 
-<h3><a name="appendixa">
+<h3><a name="appendixa" />
 Appendix A. Grammar for CUP Specification Files</a> (0.10j)</h3>
 <hr><br>
 <pre><tt>java_cup_spec      ::= package_spec import_list code_parts
@@ -1220,9 +1245,9 @@ opt_semi	   ::= SEMI | empty
 </tt></pre>
 <hr><p></p><p>
 
-</p><h3><a name="appendixb">Appendix B. A Very Simple Example Scanner</a><a></a></h3>
-<hr><a><br>
-</a><pre><a><tt>// Simple Example Scanner Class
+</p><h3><a name="appendixb" />Appendix B. A Very Simple Example Scanner</h3>
+<hr><br>
+<pre><tt>// Simple Example Scanner Class
 
 import java_cup.runtime.*;
 import sym;
@@ -1278,11 +1303,10 @@ public class scanner {
 	  }
     }
 };
-</tt></a></pre>
+</tt></pre>
 
 
-<a name="changes">
-</a><h3><a name="changes">Appendix C:  Incompatibilites between CUP 0.9 and CUP 0.10</a></h3>
+<a name="changes" /><h3><a name="changes">Appendix C:  Incompatibilites between CUP 0.9 and CUP 0.10</a></h3>
 
 CUP version 0.10a is a major overhaul of CUP.  The changes are severe,
 meaning no backwards compatibility to older versions.
@@ -1299,7 +1323,7 @@ The changes consist of:
 </li><li> <a href="#con_prec">Rule contextual precedence assignment</a>
 </li></ul>
 
-<h5><a name="lex_inter">Lexical Interface</a></h5>
+<h5><a name="lex_inter"></a>Lexical Interface</h5>
 
 CUP now interfaces with the lexer in a completely different
 manner.  In the previous releases, a new class was used for every
@@ -1462,7 +1486,7 @@ For a list of any other currently known bugs in CUP, see
 http://www.cs.princeton.edu/~appel/modern/java/CUP/bugs.html</a>.
 
 <a name="version">
-</a></p><h3><a name="version">Appendix E:  Change log</a></h3>
+</a></p><h3>Appendix E:  Change log</h3>
 
 <dl>
 <dt>0.9e</dt><dd>March 1996, Scott Hudson's original version.
@@ -1509,5 +1533,5 @@ CUP is not sponsored by or affiliated with Sun Microsystems, Inc.
 
 <hr>
 
-
+</div>
 </body></html>

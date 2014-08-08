@@ -1,7 +1,8 @@
     int x, y;
     y = 10;
     x = read();
-    write(x);
+    read();
+    x = write(x);
     if (x>=0)
        write (y);
     else

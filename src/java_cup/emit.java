@@ -928,7 +928,7 @@ public class emit {
 
       out.println();
       out.println(" public final Class getSymbolContainer() {");
-      out.println("    return sym.class;");
+      out.println("    return "+ symbol_const_class_name +".class;");
       out.println("}");
       
       /* constructors [CSA/davidm, 24-jul-99] */

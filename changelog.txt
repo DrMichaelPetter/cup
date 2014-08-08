@@ -1,3 +1,14 @@
+CUP version 0.11b 20140808 is a feature/bugfix release.
+
+added expected symbols to the report_error(...) method
+added an expected_token_ids() to inform about valid continuations
+added parameters and code to enable automatic creation of XML parse trees
+fixed a bug in the lookahead computation
+
+M. Petter
+Technische Universität München
+2014/02/26
+------------------------------------------------------------------------
 CUP version 0.11b beta 20140226 is a feature release.
 
 Command line flag -locations now triggers the generation of the identifiers
