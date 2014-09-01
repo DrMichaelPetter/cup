@@ -366,6 +366,7 @@ a total of eight specific parts (however, most of these are optional).
 A specification consists of:
 </p><ul>
 <li> <a href="#package_spec">package and import specifications</a>,
+</li><li> <a href="#parser_class_name">parser class name</a>,
 </li><li> <a href="#code_part">user code components</a>,
 </li><li> <a href="#symbol_list">symbol (terminal and non-terminal) lists</a>, 
 </li><li> <a href="#precedence">precedence declarations</a>, and
@@ -407,10 +408,23 @@ Any import declarations that appear in the specification will also appear
 in the source file for the <tt>parser</tt> class allowing various names from
 that package to be used directly in user supplied action code.
 
+After the package and imports, a specification can include a parser
+class name, as follows:
+
+<pre><tt> class <i>name</i>;</tt>
+</pre>
+
+If a class name is supplied, then that is the name that will be used
+for the generated parser code. As well, the generated symbols class
+will have the given name followed by "<tt>Sym</tt>".
+
+<p>If no class name is supplied, then the parser class is called
+"<tt>parser</tt>", and the symbols class is called "<tt>sym</tt>".
+
 <h4><a name="code_part"></a>2.2 User Code Components</h4>
 
-Following the optional <tt>package</tt> and <tt>import</tt> declarations
-are a series of optional declarations that allow user code to be included
+Following these declarations are another series of optional declarations 
+that allow user code to be included
 as part of the generated parser (see <a href="#parser">Section 4</a> for a 
 full description of how the parser uses this code).  As a part of the parser 
 file, a separate non-public class to contain all embedded user actions is 
@@ -1264,12 +1278,13 @@ Redwood City, CA,
 <h3><a name="appendixa" />
 Appendix A. Grammar for CUP Specification Files</a> (0.10j)</h3>
 <hr><br>
-<pre><tt>java_cup_spec      ::= package_spec import_list code_parts
+<pre><tt>java_cup_spec      ::= package_spec import_list class_name code_parts
 		       symbol_list precedence_list start_spec 
 		       production_list
 package_spec       ::= PACKAGE multipart_id SEMI | empty
 import_list        ::= import_list import_spec | empty
 import_spec        ::= IMPORT import_id SEMI
+class_name         ::= CLASS ID SEMI | empty
 code_part          ::= action_code_part | parser_code_part |
                        init_code | scan_code
 code_parts         ::= code_parts code_part | empty

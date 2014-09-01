@@ -76,6 +76,7 @@ ident = ([:jletter:] | "_" ) ([:jletterdigit:] | [:jletter:] | "_" )*
   "{:"          { sb = new StringBuffer(); csline=yyline+1; cscolumn=yycolumn+1; yybegin(CODESEG);    }
   "package"     { return symbol("PACKAGE",PACKAGE);            } 
   "import"      { return symbol("IMPORT",IMPORT);	       }
+  "class"       { return symbol("CLASS",CLASS); 	       }
   "code"        { return symbol("CODE",CODE);		       }
   "action"      { return symbol("ACTION",ACTION);	       }
   "parser"      { return symbol("PARSER",PARSER);	       }

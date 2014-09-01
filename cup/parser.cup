@@ -230,7 +230,7 @@ terminal
   PACKAGE, IMPORT, CODE, ACTION, PARSER, TERMINAL, NON, INIT, SCAN, WITH, 
   START, SEMI, COMMA, STAR, DOT, COLON, COLON_COLON_EQUALS, BAR, PRECEDENCE,
   LEFT, RIGHT, NONASSOC, PERCENT_PREC, LBRACK, RBRACK, NONTERMINAL, GT, LT,
-  QUESTION, SUPER, EXTENDS;
+  QUESTION, SUPER, EXTENDS, CLASS;
 
 terminal String  ID, CODE_STRING;
 
@@ -242,7 +242,7 @@ non terminal
   type_id, term_name_list, non_term_name_list, production, prod_part_list, 
   prod_part, new_term_id, new_non_term_id, rhs_list, rhs, empty,
   precedence_list, preced, terminal_list, precedence_l, declares_term, 
-  declares_non_term;
+  declares_non_term, class_name;
 
 non terminal String  nt_id, symbol_id, label_id, opt_label, terminal_id,
                      term_id, robust_id, typearglist, typearguement, wildcard;
@@ -263,6 +263,7 @@ spec ::=
 	:}
 	package_spec
 	import_list
+	class_name
 	code_parts
 	symbol_list
 	precedence_list
@@ -321,6 +322,15 @@ import_spec ::=
 	:}
 	SEMI
 	;
+
+class_name ::=
+    empty |
+    CLASS ID:id SEMI
+    {:
+     emit.parser_class_name = id;
+     emit.symbol_const_class_name = id + "Sym";
+    :}
+    ;
 
 /*. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . */ 
 
