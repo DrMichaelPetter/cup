@@ -371,6 +371,7 @@ public class emit {
       out.println(
        "/** Cup generated class to encapsulate user supplied action code.*/"
       );  
+      out.println("@SuppressWarnings({\"rawtypes\", \"unchecked\", \"unused\"})");
       /* TUM changes; proposed by Henning Niss 20050628: added type arguement */
       out.println("class " +  pre("actions") + typeArgument() + " {");
       /* user supplied code */
@@ -922,6 +923,7 @@ public class emit {
       out.println("/** "+version.title_str+" generated parser.");
       out.println("  * @version " + new Date());
       out.println("  */");
+      out.println("@SuppressWarnings({\"rawtypes\"})");
       /* TUM changes; proposed by Henning Niss 20050628: added typeArgument */
       out.println("public class " + parser_class_name + typeArgument() +
 		  " extends java_cup.runtime.lr_parser {");
