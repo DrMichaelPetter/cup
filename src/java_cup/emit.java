@@ -324,6 +324,19 @@ public class emit {
 		      term.index() + ";");
 	}
 
+      /* Emit names of terminals */
+      out.println("  public static final String[] terminalNames = new String[] {");
+      for (int i = 0; i < terminal.number(); i++) {
+	  out.print("  \"");
+	  out.print(terminal.find(i).name());
+	  out.print("\"");
+	  if (i < terminal.number() - 1) {
+	      out.print(",");
+	  }
+	  out.println();
+      }
+      out.println("  };");
+
       /* do the non terminals if they want them (parser doesn't need them) */
       if (emit_non_terms)
 	{
