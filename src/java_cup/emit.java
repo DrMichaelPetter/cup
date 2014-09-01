@@ -1067,6 +1067,7 @@ public class emit {
       out.println(
        "/** Cup generated class to encapsulate user supplied action code.*/"
       );  
+      out.println("@SuppressWarnings({\"rawtypes\", \"unchecked\", \"unused\"})");
       out.println("class " +  pre("actions") + typeArgument() + " {");
       /* user supplied code */
       if (action_code != null)
