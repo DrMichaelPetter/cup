@@ -1041,14 +1041,16 @@ public class emit {
           out.println(parser_code);
 	}
 
-      /* end of class */
-      out.println("}");
 
       /* put out the action code class */
       if (!_xmlactions)
     	  emit_action_code(out, start_prod);
       else
     	  emit_xmlaction_code(out, start_prod);
+
+      /* end of class */
+      out.println("}");
+
       parser_time = System.currentTimeMillis() - start_time;
     }
 /** Emit code for generic XML parsetree output. 
