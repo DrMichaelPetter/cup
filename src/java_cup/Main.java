@@ -91,6 +91,8 @@ public class Main {
   protected static boolean opt_show_timing  = false;
   /** User option -- do we run produce extra debugging messages */
   protected static boolean opt_do_debug     = false;
+  /** User option -- do eclipse debug symbols */
+  protected static boolean opt_do_debugsymbols = false; 
   /** User option -- do we compact tables by making most common reduce the 
       default action */
   protected static boolean opt_compact_red  = false;
@@ -370,6 +372,7 @@ version.title_str + "\n" +
 	        opt_dump_states = opt_dump_tables = opt_dump_grammar = true; 
 	  else if (argv[i].equals("-time"))         opt_show_timing = true; 
 	  else if (argv[i].equals("-debug"))        opt_do_debug = true;
+	  else if (argv[i].equals("-debugsymbols"))        opt_do_debugsymbols = true;
 	  /* frankf 6/18/96 */
 	  else if (argv[i].equals("-nopositions"))  lr_values = false;
 	  else if (argv[i].equals("-locations"))    locations = true;
@@ -485,6 +488,7 @@ version.title_str + "\n" +
       /* create a parser and parse with it */
       ComplexSymbolFactory csf = new ComplexSymbolFactory();
       parser_obj = new parser(new Lexer(csf),csf);
+      parser_obj.setDebugSymbols(opt_do_debugsymbols);
       try {
 	if (opt_do_debug)
           parser_obj.debug_parse();

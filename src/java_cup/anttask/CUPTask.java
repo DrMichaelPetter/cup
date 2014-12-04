@@ -55,6 +55,7 @@ public class CUPTask extends Task
     private boolean dump=false;
     private boolean time=false;
     private boolean debug=false;
+    private boolean debugsymbols=false;
     private boolean nopositions=false;
     private boolean xmlactions=false;
     private boolean genericlabels=false;
@@ -91,6 +92,7 @@ public class CUPTask extends Task
 	if (dump)          {  sc.add("-dump"); }
 	if (time)          {  sc.add("-time"); }
 	if (debug)         {  sc.add("-debug"); }
+	if (debugsymbols)  {  sc.add("-debugsymbols"); }
 	if (nopositions)   {  sc.add("-nopositions"); }
 	if (locations)     {  sc.add("-locations"); }
 	if (genericlabels) {  sc.add("-genericlabels"); }
@@ -549,8 +551,26 @@ public class CUPTask extends Task
     public void setDebug(boolean argDebug){
 	this.debug = argDebug;
     }
-
+    
     /**
+      * Gets the value of debug
+     *
+      * @return the value of debug
+      */
+    public boolean isDebugSymbols() {
+ 	return this.debugsymbols;
+    }
+ 
+     /**
+      * Sets the value of debug
+      *
+      * @param argDebug Value to assign to this.debug
+      */
+    public void setDebugSymbols(boolean argDebug){
+ 	this.debugsymbols = argDebug;
+    }
+ 
+     /**
      * Gets the value of nopositions
      *
      * @return the value of nopositions
