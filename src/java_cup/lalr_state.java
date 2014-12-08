@@ -809,6 +809,7 @@ public class lalr_state {
       String message = "*** Shift/Reduce conflict found in state #"+index()+"\n" +
       "  between " + red_itm.to_simple_string()+"\n";
 
+      int relevancecounter = 0;
       /* find and report on all items that shift under our conflict symbol */
       for (Enumeration itms = items().all(); itms.hasMoreElements(); )
 	{
@@ -817,6 +818,7 @@ public class lalr_state {
 	  /* only look if its not the same item and not a reduce */
 	  if (itm != red_itm && !itm.dot_at_end())
 	    {
+		  relevancecounter++;
 	      /* is it a shift on our conflicting terminal */
 	      shift_sym = itm.symbol_after_dot();
 	      if (!shift_sym.is_non_term() && shift_sym.index() == conflict_sym)
@@ -828,7 +830,7 @@ public class lalr_state {
 	}
       message += "  under symbol "+ terminal.find(conflict_sym).name() + "\n"+
       "  Resolved in favor of shifting.\n";
-
+      if (relevancecounter==0) return;
       /* count the conflict */
       emit.num_conflicts++;
       ErrorManager.getManager().emit_warning(message);
