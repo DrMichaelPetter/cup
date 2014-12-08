@@ -818,11 +818,12 @@ public class lalr_state {
 	  /* only look if its not the same item and not a reduce */
 	  if (itm != red_itm && !itm.dot_at_end())
 	    {
-		  relevancecounter++;
+
 	      /* is it a shift on our conflicting terminal */
 	      shift_sym = itm.symbol_after_dot();
 	      if (!shift_sym.is_non_term() && shift_sym.index() == conflict_sym)
 	        {
+			  relevancecounter++;
 		  /* yes, report on it */
                   message += "  and     " + itm.to_simple_string()+"\n";
 		}
