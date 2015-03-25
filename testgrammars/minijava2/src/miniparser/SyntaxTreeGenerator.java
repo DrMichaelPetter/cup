@@ -1,3 +1,4 @@
+package miniparser;
 import minijava.*;
 import java.util.*;
 import java.io.*;

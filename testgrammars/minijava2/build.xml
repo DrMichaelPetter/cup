@@ -16,8 +16,8 @@
     <mkdir dir="${dist}"/>
   </target>
   <target name="clean">
-    <delete file="${java}/Parser.java" />
-    <delete file="${java}/Lexer.java" />
+    <delete file="${java}/miniparser/Parser.java" />
+    <delete file="${java}/miniparser/Lexer.java" />
     <delete dir="${classes}" />
     <delete dir="${dist}" />
   </target>
@@ -36,7 +36,7 @@
    <copy todir="${dist}"><fileset dir="${lib}" includes="**/**.jar"/></copy>  
     <jar jarfile="${dist}/Compiler.jar" basedir="${classes}">
      <manifest>
-       <attribute name="Main-Class" value="Main" />
+       <attribute name="Main-Class" value="miniparser.Main" />
        <attribute name="Class-Path" value="java-cup-11b-runtime.jar" />
      </manifest>
     </jar>

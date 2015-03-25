@@ -1,3 +1,4 @@
+package miniparser;
 import java_cup.runtime.ComplexSymbolFactory;
 
 import java.io.*;
