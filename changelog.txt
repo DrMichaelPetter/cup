@@ -1,3 +1,20 @@
+CUP version 0.11b 20150326 is a bugfix release.
+
+Fixed an issue with empty productions having non-empty location information
+Fixed an issue with deprecation of constructors
+
+M. Petter
+Technische Universität München
+2015/02/26
+------------------------------------------------------------------------
+CUP version 0.11b 20150226 is a feature release.
+
+added the means to move Locations
+
+M. Petter
+Technische Universität München
+2015/02/26
+------------------------------------------------------------------------
 CUP version 0.11b 20140808 is a feature/bugfix release.
 
 added expected symbols to the report_error(...) method

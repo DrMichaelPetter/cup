@@ -527,7 +527,7 @@ public class emit {
 	    out.println("              " + pre("result") + " = parser.getSymbolFactory().newSymbol(" + 
                         "\""+ 	prod.lhs().the_symbol().name() +"\","+ 
 			prod.lhs().the_symbol().index()  +
-			", " + leftstring + ", " + rightstring + ", RESULT);");
+			", " + leftstring + ((prod.rhs_length()==0)?(""):(", " + rightstring)) + ", RESULT);");
 	  } else {
 	    out.println("              " + pre("result") + " = parser.getSymbolFactory().newSymbol(" + 
 		"\""+ 	prod.lhs().the_symbol().name() +  "\","+ 
@@ -943,10 +943,12 @@ public class emit {
       /* constructors [CSA/davidm, 24-jul-99] */
       out.println();
       out.println("  /** Default constructor. */");
+      out.println("  @Deprecated");
       out.println("  public " + parser_class_name + "() {super();}");
       if (!suppress_scanner) {
 	  out.println();
 	  out.println("  /** Constructor which sets the default scanner. */");
+	  out.println("  @Deprecated");
 	  out.println("  public " + parser_class_name + 
 		      "(java_cup.runtime.Scanner s) {super(s);}");
           // TUM 20060327 added SymbolFactory aware constructor
