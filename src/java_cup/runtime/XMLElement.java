@@ -72,6 +72,7 @@ public abstract class XMLElement {
 		writer.close();
 	}
 	protected String tagname;
+        public String getTagname() { return tagname; }
 	public abstract Location right();
 	public abstract Location left();
 	protected abstract void dump(XMLStreamWriter writer) throws XMLStreamException;
@@ -92,6 +93,9 @@ public abstract class XMLElement {
 			return response;
 		}
 		private int variant;
+	    public int getVariant() {
+		return variant;
+	    }
 		LinkedList<XMLElement> list;
 		public NonTerminal(String tagname, int variant, XMLElement... l) {
 			this.tagname=tagname;
@@ -108,7 +112,7 @@ public abstract class XMLElement {
 		}
 		public Location right() {
 			for (Iterator<XMLElement> it = list.descendingIterator();it.hasNext();){
-				 Location loc = it.next().left();
+				 Location loc = it.next().right();
 				 if (loc!=null) return loc;
 			}
 			return null;
