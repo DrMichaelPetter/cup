@@ -76,8 +76,8 @@ public abstract class XMLElement {
 	public abstract Location right();
 	public abstract Location left();
 	protected abstract void dump(XMLStreamWriter writer) throws XMLStreamException;
-        public abstract List<XMLElement> getChildren();
-        public abstract boolean hasChildren();
+        public List<XMLElement> getChildren() {return new LinkedList<XMLElement>(); };
+        public boolean hasChildren() { return false; };
 	public static class NonTerminal extends XMLElement {
 	    public boolean hasChildren()  { return !list.isEmpty(); }
 	    public List<XMLElement> getChildren()  { return list; }
@@ -147,7 +147,6 @@ public abstract class XMLElement {
 
 	public static class Error extends XMLElement {
 	    public boolean hasChildren()  { return false; }
-	    public List<XMLElement> getChildren()  { return null; }
 	    @Override
 		public List<XMLElement> selectById(String s) {
 			return new LinkedList<XMLElement>();
@@ -174,7 +173,6 @@ public abstract class XMLElement {
 	
 	public static class Terminal extends XMLElement {
 	    public boolean hasChildren()  { return false; }
-	    public List<XMLElement> getChildren()  { return null; }
 	    public List<XMLElement> selectById(String s) {
 			List<XMLElement> ret = new LinkedList<XMLElement>();
 			if (tagname.equals(s)) { ret.add(this);	}

@@ -1,4 +1,5 @@
 /* Minijava Grammar */
+import java_cup.runtime.*;
 import java_cup.runtime.ComplexSymbolFactory;
 import java_cup.runtime.ScannerBuffer;
 import java_cup.runtime.XMLElement;
@@ -21,6 +22,15 @@ parser code {:
       // start parsing
       Parser p = new Parser(lexer,csf);
       XMLElement e = (XMLElement)p.parse().value;
+
+      for (XMLElement el: SyntaxTreeXPath.query(args[2],e)){
+      	  System.out.println(el.getTagname());
+      }
+
+
+      TestVisitor t = new TestVisitor();
+      SyntaxTreeDFS.dfs(e,t);
+
       // create XML output file 
       XMLOutputFactory outFactory = XMLOutputFactory.newInstance();
       XMLStreamWriter sw = outFactory.createXMLStreamWriter(new FileOutputStream(args[1]));

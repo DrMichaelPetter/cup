@@ -1,4 +1,4 @@
-<project name="emugen" default ="dist" basedir=".">
+<project name="cup" default ="dist" basedir=".">
   <property name="etc"       location="etc"       />
   <property name="bin"       location="bin"       />
   <property name="lib"       location="lib"       />
@@ -69,7 +69,7 @@
        token="+ version_str"
        value='+ "v0.11b ${cupversion} (SVN rev ${svnversion})"'>
     </replace>
-    <javac srcdir="${java}" destdir="${classes}" verbose="off" listfiles="off" debug="on" source="1.5" target="1.5">
+    <javac srcdir="${java}" destdir="${classes}" verbose="off" listfiles="off" debug="on" source="1.8" target="1.8">
       <classpath refid="libraries"/>
     </javac>
   </target>
