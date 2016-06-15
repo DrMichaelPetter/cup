@@ -3,7 +3,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-public class SyntaxTreeTranform {
+public class SyntaxTreeTransform {
 
 	private static class ChainRemover extends SyntaxTreeDFS.AbstractVisitor{
 		public XMLElement root(){
