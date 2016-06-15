@@ -1,4 +1,4 @@
-<project name="cup" default ="dist" basedir=".">
+<project name="cup" default ="dist" basedir="." xmlns:if="ant:if" xmlns:unless="ant:unless">
   <property name="etc"       location="etc"       />
   <property name="bin"       location="bin"       />
   <property name="lib"       location="lib"       />
@@ -13,22 +13,34 @@
   <!-- initialize the workspace -->
   <target name="init">
     <tstamp />
+    <available file="version.txt" property="version.present" />
+    <touch unless:set="version.present" file="version.txt" />
     <mkdir dir="${src}" />
     <mkdir dir="${java}" />
     <mkdir dir="${classes}" />
     <mkdir dir="${dist}" />
-    <loadfile property="cupversion" srcFile="version.txt"/>
-    <exec executable="svn" outputproperty="svnversion">
-      <arg value="info"/>
+    <loadfile property="cupversion" srcFile="version.txt" failonerror="false" />
+    <property name="cupversion" value="custombuild" unless:set="cupversion"/>
+    <exec executable="git" outputproperty="gitversion">
+      <arg value="log"/>
+      <arg value="-1"/>
+      <arg value="--format=%h"/>
+    </exec>
+    <exec executable="git" outputproperty="changed">
+      <arg value="status"/>
+      <arg value="--porcelain"/>
       <redirector>
 	<outputfilterchain>
-	  <linecontains>
-	    <contains value="Revision"/>
-	  </linecontains>
-	  <deletecharacters chars="Revision: "/>
-        </outputfilterchain>
-      </redirector>
+	<linecontainsregexp>
+	  <regexp pattern='^M.*'/>
+	</linecontainsregexp>
+	<tokenfilter>
+	  <replaceregex pattern=".*" replace="modifications based on "/>
+	</tokenfilter>
+	</outputfilterchain>
+	</redirector>
     </exec>
+    <property name="svnversion">${changed}${gitversion}</property>
   </target>
 
   <property environment="env" />
@@ -67,7 +79,7 @@
     <copy todir="${java}"><fileset dir="${src}"></fileset></copy>
     <replace file="${java}/java_cup/version.java"
        token="+ version_str"
-       value='+ "v0.11b ${cupversion} (SVN rev ${svnversion})"'>
+       value='+ "v0.11b ${cupversion} (GIT ${svnversion})"'>
     </replace>
     <javac srcdir="${java}" destdir="${classes}" verbose="off" listfiles="off" debug="on" source="1.8" target="1.8">
       <classpath refid="libraries"/>
