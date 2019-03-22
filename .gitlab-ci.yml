@@ -1,12 +1,15 @@
 image: java:latest
 
+before_script:
+  - apt-get update
+  - apt-get -y install ant
+
 stages:
   - build
 
 build:
   stage: build
-  script: /usr/lib/jvm/java-8-openjdk-amd64/bin/javac HelloWorld.java
-  artifacts:
-    paths:
-     - HelloWorld.*
+  script: 
+    - ant clean
+    - ant dist
 
