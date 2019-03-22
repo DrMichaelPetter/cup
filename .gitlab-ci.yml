@@ -1,8 +1,8 @@
 image: java:latest
 
 before_script:
-  - apt-get update
-  - apt-get -y install ant
+  - sudo apt-get update
+  - sudo apt-get -y install ant
 
 stages:
   - build
