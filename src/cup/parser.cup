@@ -241,7 +241,7 @@ scan with {:
 /*----------------------------------------------------------------*/ 
 
 terminal
-  PACKAGE, IMPORT, CODE, ACTION, PARSER, TERMINAL, NON, INIT, SCAN, WITH, 
+  PACKAGE, IMPORT, STATIC ,CODE, ACTION, PARSER, TERMINAL, NON, INIT, SCAN, WITH, 
   START, SEMI, COMMA, STAR, DOT, COLON, COLON_COLON_EQUALS, BAR, PRECEDENCE,
   LEFT, RIGHT, NONASSOC, PERCENT_PREC, LBRACK, RBRACK, NONTERMINAL, GT, LT,
   QUESTION, SUPER, EXTENDS, CLASS;
@@ -330,6 +330,17 @@ import_spec ::=
 	{: 
 	  /* save this import on the imports list */
 	  emit.import_list.push(multipart_name);
+
+	  /* reset the accumulated multipart name */
+	  multipart_name = new String();
+	:}
+	SEMI
+	|
+	IMPORT STATIC
+	import_id 
+	{: 
+	  /* save this import on the imports list */
+	  emit.import_list.push(" static " + multipart_name);
 
 	  /* reset the accumulated multipart name */
 	  multipart_name = new String();
