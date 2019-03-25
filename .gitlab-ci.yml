@@ -12,7 +12,7 @@ build:
     - ant clean
     - ant dist
   artifacts:
-    name: "cup-binaries-"
+    name: "cup-binaries-$CI_COMMIT_SHA"
     paths:
     - target/dist/java-cup-11b.jar
     - target/dist/java-cup-11b-runtime.jar
