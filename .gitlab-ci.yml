@@ -11,8 +11,6 @@ build:
   script: 
     - ant clean
     - ant dist
-    - curl --header 'Content-Type: application/json' --header "PRIVATE-TOKEN: gDybLx3yrUK_HLp3qPjS" --data '{ "name": "New release", "tag_name": "v0.3", "description": "Super nice release", "assets": { "links": [{ "name": "hoge", "url": "https://google.com" }] } }' --request POST http://localhost:3000/api/v4/projects/24/releases
-
   artifacts:
     name: "cup-binaries-$CI_COMMIT_SHORT_SHA"
     paths:
