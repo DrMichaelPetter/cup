@@ -11,4 +11,8 @@ build:
   script: 
     - ant clean
     - ant dist
+  artifacts:
+    paths:
+    - target/dist/java-cup-11b.jar
+    - target/dist/java.cup-11b-runtime.jar
 
