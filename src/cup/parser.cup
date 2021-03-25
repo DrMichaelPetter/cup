@@ -124,7 +124,9 @@ action code {:
       if (rhs_pos >= MAX_RHS)
 	throw new Exception("Internal Error: Productions limited to " + 
 			     MAX_RHS + " symbols and actions"); 
-
+	  for (int i=0;i<rhs_pos;i++)
+	  	if (part.label()!=null && part.label().equals(rhs_parts[i].label()))
+		  this.parser.report_error("Label '"+part.label()+"' for symbol #"+rhs_pos+" already used for symbol #"+i+"; compilation will fail",parser.stack.peek());
       rhs_parts[rhs_pos] = part;
       rhs_pos++;
     }
