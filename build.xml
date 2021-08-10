@@ -80,7 +80,7 @@
        token="+ version_str"
        value='+ "v0.11b ${cupversion} (GIT ${svnversion})"'>
     </replace>
-    <javac srcdir="${java}" destdir="${classes}" verbose="off" listfiles="off" debug="on" source="1.8" target="1.8">
+    <javac srcdir="${java}" destdir="${classes}" verbose="off" listfiles="off" debug="on" source="10" target="10">
       <classpath refid="libraries"/>
     </javac>
   </target>
