@@ -1,7 +1,6 @@
 
 package java_cup;
 
-import java.util.Enumeration;
 import java.io.*;
 import java_cup.runtime.*;
 

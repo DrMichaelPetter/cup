@@ -33,12 +33,10 @@ public class SyntaxTreeTransform {
 		public void defaultPost(XMLElement element, List<XMLElement> children) {
 			int n = intstack.pop();
 			if (n > 0) {
-				XMLElement el = null;
 				outer: do {
 					if (name.contains(element.getTagname()))
 						for (XMLElement e : children)
 							if (e.getTagname().equals(element.getTagname())) {
-								el = e;
 								break outer;
 							}
 					LinkedList<XMLElement> elems = new LinkedList<>();
@@ -51,8 +49,6 @@ public class SyntaxTreeTransform {
 				LinkedList<XMLElement> elems = new LinkedList<>();
 				while (n-- > 0) {
 					elems.addFirst(stack.pop());
-					// XMLElement x = stack.pop();
-					// if (x!=el) elems.addFirst(x);
 				}
 				stack.addAll(elems);
 				intstack.push(intstack.pop() + n - 1);

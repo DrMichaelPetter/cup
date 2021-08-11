@@ -45,6 +45,7 @@ public class shift_action extends parse_action {
   /*-----------------------------------------------------------*/
 
   /** Quick access to type of action. */
+  @Override
   public int kind() {
     return SHIFT;
   }

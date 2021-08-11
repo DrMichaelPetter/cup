@@ -2,7 +2,6 @@ package java_cup;
 
 import java.io.PrintWriter;
 import java.util.Stack;
-import java.util.Enumeration;
 
 /**
  * This class handles emitting generated code for the resulting parser. The
@@ -157,7 +156,7 @@ public class emit {
   /* . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . */
 
   /** List of imports (Strings containing class names) to go with actions. */
-  public static Stack import_list = new Stack();
+  public static Stack<String> import_list = new Stack<>();
 
   /* . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . */
 
@@ -248,7 +247,7 @@ public class emit {
     _locations = false;
     _lr_values = true;
     action_code = null;
-    import_list = new Stack();
+    import_list = new Stack<>();
     init_code = null;
     not_reduced = 0;
     num_conflicts = 0;
@@ -432,7 +431,7 @@ public class emit {
       int proditeration = instancecounter * UPPERLIMIT;
       prod = production.find(proditeration);
       for (; proditeration < Math.min((instancecounter + 1) * UPPERLIMIT,
-          production.number()); prod = (production) production.find(++proditeration)) {
+          production.number()); prod = production.find(++proditeration)) {
         /* case label */
         out.println("          /*. . . . . . . . . . . . . . . . . . . .*/");
         out.println("          case " + prod.index() + ": // " + prod.to_simple_string());
@@ -775,7 +774,6 @@ public class emit {
    */
   protected static void do_reduce_table(PrintWriter out, parse_reduce_table red_tab) {
     lalr_state goto_st;
-    parse_action act;
 
     long start_time = System.currentTimeMillis();
 
@@ -1093,7 +1091,7 @@ public class emit {
       int proditeration = instancecounter * UPPERLIMIT;
       prod = production.find(proditeration);
       for (; proditeration < Math.min((instancecounter + 1) * UPPERLIMIT,
-          production.number()); prod = (production) production.find(++proditeration)) {
+          production.number()); prod = production.find(++proditeration)) {
         /* case label */
         out.println("          /*. . . . . . . . . . . . . . . . . . . .*/");
         out.println("          case " + prod.index() + ": // " + prod.to_simple_string());

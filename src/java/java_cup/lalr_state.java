@@ -2,7 +2,6 @@
 package java_cup;
 
 import java.util.Hashtable;
-import java.util.Enumeration;
 import java.util.Stack;
 
 /**

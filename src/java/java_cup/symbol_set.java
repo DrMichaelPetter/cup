@@ -3,7 +3,6 @@ package java_cup;
 
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Enumeration;
 
 /**
  * This class represents a set of symbols and provides a series of set
@@ -30,8 +29,9 @@ public class symbol_set implements Iterable<symbol> {
    */
   public symbol_set(symbol_set other) throws internal_error {
     not_null(other);
-    _all = (Hashtable<String, symbol>) other._all.clone();
+    _all = new Hashtable<>(other._all);
   }
+
 
   /*-----------------------------------------------------------*/
   /*--- (Access to) Instance Variables ------------------------*/

@@ -39,7 +39,7 @@ public class lalr_item_set implements Iterable<lalr_item> {
    */
   public lalr_item_set(lalr_item_set other) throws internal_error {
     not_null(other);
-    _all = (Hashtable<lalr_item, lalr_item>) other._all.clone();
+    _all = new Hashtable<>(other._all);
   }
 
   /*-----------------------------------------------------------*/
@@ -53,6 +53,7 @@ public class lalr_item_set implements Iterable<lalr_item> {
   protected Hashtable<lalr_item, lalr_item> _all = new Hashtable<>(11);
 
   /** Access to all elements of the set. */
+  @Override
   public Iterator<lalr_item> iterator() {
     return _all.values().iterator();
   }

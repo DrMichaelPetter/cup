@@ -82,6 +82,8 @@
     </replace>
     <javac srcdir="${java}" destdir="${classes}" verbose="off" listfiles="off" debug="on" source="10" target="10">
       <classpath refid="libraries"/>
+      <compilerarg value="-Xlint:unchecked" />
+      <compilerarg value="-Xdiags:verbose" />
     </javac>
   </target>
 

@@ -1051,7 +1051,7 @@ public abstract class lr_parser {
     while (!shift_under_error()) {
       /* pop the stack */
       if (debug)
-        debug_message("# Pop stack by one, state was # " + ((Symbol) stack.peek()).parse_state);
+        debug_message("# Pop stack by one, state was # " + stack.peek().parse_state);
       left = stack.pop(); // TUM 20060327 removed .left
       tos--;
 

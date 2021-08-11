@@ -23,15 +23,13 @@ package java_cup.anttask;
 
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.types.Path;
 
 import java.util.List;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.io.File;
 import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URL;
 
 import java_cup.version;
 
@@ -69,7 +67,7 @@ public class CUPTask extends Task {
      */
 
     public void execute() throws BuildException {
-        List sc = new ArrayList(); // sc = simulated commandline
+        List<String> sc = new LinkedList<>(); // sc = simulated commandline
         // here, we parse our elements
         if (parser != null) {
             sc.add("-parser");
@@ -225,7 +223,7 @@ public class CUPTask extends Task {
         sc.add(srcfile);
         String[] args = new String[sc.size()];
         for (int i = 0; i < args.length; i++)
-            args[i] = (String) sc.get(i);
+            args[i] = sc.get(i);
 
         try {
             java_cup.Main.main(args);
@@ -250,10 +248,12 @@ public class CUPTask extends Task {
                 if ((line.startsWith("package")) && (line.indexOf(";") != -1)) {
                     String result = line.substring(8, line.indexOf(";"));
                     result = result.replace('.', System.getProperty("file.separator").charAt(0));
+                    br.close();
                     return System.getProperty("file.separator") + result;
                 }
 
             }
+            br.close();
         } catch (IOException ioe) {
         }
         return "";
