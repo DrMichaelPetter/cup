@@ -126,14 +126,14 @@ action code {:
 			     MAX_RHS + " symbols and actions"); 
 	  for (int i=0;i<rhs_pos;i++)
 	  	if (part.label()!=null && part.label().equals(rhs_parts[i].label()))
-		  this.parser.report_error("Label '"+part.label()+"' for symbol #"+rhs_pos+" already used for symbol #"+i+"; compilation will fail",parser.stack.peek());
+		  this.parser.report_error("Label '"+part.label()+"' for symbol #"+rhs_pos+" already used for symbol #"+i+"; compilation will fail",part);
       rhs_parts[rhs_pos] = part;
       rhs_pos++;
     }
 
   /** string to build up multiple part names */
   protected String multipart_name = new String();
-  protected Stack multipart_names = new Stack();
+  protected Stack<String> multipart_names = new Stack<>();
   /** append a new name segment to the accumulated multipart name */
 
 //  TUM CHANGES
@@ -149,10 +149,10 @@ action code {:
 // TUM CHANGES
 
   /** table of declared symbols -- contains production parts indexed by name */
-  protected Hashtable symbols = new Hashtable();
+  protected Hashtable<String,production_part> symbols = new Hashtable<>();
 
   /** table of just non terminals -- contains non_terminals indexed by name */
-  protected Hashtable non_terms = new Hashtable();
+  protected Hashtable<String,non_terminal> non_terms = new Hashtable<>();
 
   /** declared start non_terminal */
   protected non_terminal start_nt = null;
