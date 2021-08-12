@@ -11,7 +11,7 @@ public class ErrorManager{
     public int getFatalCount() { return fatals; }
     public int getErrorCount() { return errors; }
     public int getWarningCount() { return warnings; }
-    static {
+    public static void clear() {
         errorManager = new ErrorManager();
     }
     public static ErrorManager getManager() { return errorManager; }

@@ -381,7 +381,7 @@ public class production {
    * @param c the character in question.
    */
   protected static boolean is_id_start(char c) {
-    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '_');
+    return c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z' || c == '_';
 
     // later need to handle non-8-bit chars here
   }
@@ -394,7 +394,7 @@ public class production {
    * @param c the character in question.
    */
   protected static boolean is_id_char(char c) {
-    return is_id_start(c) || (c >= '0' && c <= '9');
+    return is_id_start(c) || c >= '0' && c <= '9';
   }
 
   /*-----------------------------------------------------------*/
@@ -585,7 +585,7 @@ public class production {
         /* create a new production with just the action */
         new action_production(this, new_nt, null, 0,
             declare_str + ((action_part) rhs(act_loc)).code_string(),
-            (lastLocation == -1) ? -1 : (act_loc - lastLocation));
+            lastLocation == -1 ? -1 : act_loc - lastLocation);
 
         /* replace the action with the generated non terminal */
         _rhs[act_loc] = new symbol_part(new_nt);
@@ -722,7 +722,7 @@ public class production {
     /* catch any internal errors */
     try {
       result = "production [" + index() + "]: ";
-      result += ((lhs() != null) ? lhs().toString() : "$$NULL-LHS$$");
+      result += lhs() != null ? lhs().toString() : "$$NULL-LHS$$";
       result += " :: = ";
       for (int i = 0; i < rhs_length(); i++)
         result += rhs(i) + " ";
@@ -753,7 +753,7 @@ public class production {
   public String to_simple_string() throws internal_error {
     String result;
 
-    result = ((lhs() != null) ? lhs().the_symbol().name() : "NULL_LHS");
+    result = lhs() != null ? lhs().the_symbol().name() : "NULL_LHS";
     result += " ::= ";
     for (int i = 0; i < rhs_length(); i++)
       if (!rhs(i).is_action())

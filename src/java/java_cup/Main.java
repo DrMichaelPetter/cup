@@ -183,6 +183,7 @@ public class Main {
     parse_reduce_row.clear();
     parse_action_row.clear();
     lalr_state.clear();
+    ErrorManager.clear();
 
     /* process user options and arguments */
     parse_args(argv);

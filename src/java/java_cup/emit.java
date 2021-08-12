@@ -308,7 +308,7 @@ public class emit {
    * @param sym_interface  should we emit an interface, rather than a class?
    */
   public static void symbols(PrintWriter out, boolean emit_non_terms, boolean sym_interface) {
-    String class_or_interface = (sym_interface) ? "interface" : "class";
+    String class_or_interface = sym_interface ? "interface" : "class";
 
     long start_time = System.currentTimeMillis();
 
@@ -415,7 +415,7 @@ public class emit {
           + String.format("%08d", Integer.valueOf(instancecounter)) + "(");
       out.println("    int                        " + pre("act_num,"));
       out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
-      out.println("    java.util.Stack<Symbol>    " + pre("stack,"));
+      out.println("    java.util.Stack<java_cup.runtime.Symbol>    " + pre("stack,"));
       out.println("    int                        " + pre("top)"));
       out.println("    throws java.lang.Exception");
       out.println("    {");
@@ -508,23 +508,12 @@ public class emit {
         if (emit.lr_values()) {
           int loffset;
           String leftstring, rightstring;
-          // TUM 20050917
-          // int roffset = 0;
-          rightstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") +
-          // TUM 20050917
-          // ".elementAt(" + emit.pre("top") + "-" + roffset + "))"+
-              ".peek()" +
-              // TUM 20060327 removed .right
-              ")";
+          rightstring = emit.pre("stack") + ".peek()" ;
           if (prod.rhs_length() == 0)
             leftstring = rightstring;
           else {
             loffset = prod.rhs_length() - 1;
-            leftstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") +
-            // TUM 20050917
-                ((loffset == 0) ? (".peek()") : (".elementAt(" + emit.pre("top") + "-" + loffset + ")")) +
-                // TUM 20060327 removed .left
-                ")";
+            leftstring = emit.pre("stack") + ((loffset == 0) ? (".peek()") : (".elementAt(" + emit.pre("top") + "-" + loffset + ")"));
           }
           out.println("              " + pre("result") + " = parser.getSymbolFactory().newSymbol(" + "\""
               + prod.lhs().the_symbol().name() + "\"," + prod.lhs().the_symbol().index() + ", " + leftstring
@@ -565,7 +554,7 @@ public class emit {
     out.println("  public final java_cup.runtime.Symbol " + pre("do_action") + "(");
     out.println("    int                        " + pre("act_num,"));
     out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
-    out.println("    java.util.Stack<Symbol>     " + pre("stack,"));
+    out.println("    java.util.Stack<java_cup.runtime.Symbol>     " + pre("stack,"));
     out.println("    int                        " + pre("top)"));
     out.println("    throws java.lang.Exception");
     out.println("    {");
@@ -658,6 +647,7 @@ public class emit {
     /* do the public accessor method */
     out.println();
     out.println("  /** Access to production table. */");
+    out.println("  @Override");
     out.println("  public short[][] production_table() " + "{return _production_table;}");
 
     production_table_time = System.currentTimeMillis() - start_time;
@@ -720,7 +710,7 @@ public class emit {
             if (red != row.default_reduce) {
               /* make entry */
               temp_table[nentries++] = (short) j;
-              temp_table[nentries++] = (short) (-(red + 1));
+              temp_table[nentries++] = (short) -(red + 1);
             }
           } else if (act.kind() == parse_action.NONASSOC) {
             /* do nothing, since we just want a syntax error */
@@ -738,7 +728,7 @@ public class emit {
       /* finish off the row with a default entry */
       action_table[i][nentries++] = -1;
       if (row.default_reduce != -1)
-        action_table[i][nentries++] = (short) (-(row.default_reduce + 1));
+        action_table[i][nentries++] = (short) -(row.default_reduce + 1);
       else
         action_table[i][nentries++] = 0;
     }
@@ -754,6 +744,7 @@ public class emit {
     /* do the public accessor method */
     out.println();
     out.println("  /** Access to parse-action table. */");
+    out.println("  @Override");
     out.println("  public short[][] action_table() {return _action_table;}");
 
     action_table_time = System.currentTimeMillis() - start_time;
@@ -811,6 +802,7 @@ public class emit {
     /* do the public accessor method */
     out.println();
     out.println("  /** Access to <code>reduce_goto</code> table. */");
+    out.println("  @Override");
     out.println("  public short[][] reduce_table() {return _reduce_table;}");
     out.println();
 
@@ -826,15 +818,15 @@ public class emit {
     nchar = do_newline(out, nchar, nbytes);
     nbytes += do_escaped(out, (char) (sa.length & 0xFFFF));
     nchar = do_newline(out, nchar, nbytes);
-    for (int i = 0; i < sa.length; i++) {
-      nbytes += do_escaped(out, (char) (sa[i].length >> 16));
+    for (var element:sa) {
+      nbytes += do_escaped(out, (char) (element.length >> 16));
       nchar = do_newline(out, nchar, nbytes);
-      nbytes += do_escaped(out, (char) (sa[i].length & 0xFFFF));
+      nbytes += do_escaped(out, (char) (element.length & 0xFFFF));
       nchar = do_newline(out, nchar, nbytes);
-      for (int j = 0; j < sa[i].length; j++) {
+      for (var element2 : element) {
         // contents of string are (value+2) to allow for common -1, 0 cases
         // (UTF-8 encoding is most efficient for 0<c<0x80)
-        nbytes += do_escaped(out, (char) (2 + sa[i][j]));
+        nbytes += do_escaped(out, (char) (2 + element2));
         nchar = do_newline(out, nchar, nbytes);
       }
     }
@@ -921,6 +913,7 @@ public class emit {
     out.println("public class " + parser_class_name + typeArgument() + " extends java_cup.runtime.lr_parser {");
 
     out.println();
+    out.println(" @Override");
     out.println(" public final Class<?> getSymbolContainer() {");
     out.println("    return " + symbol_const_class_name + ".class;");
     out.println("}");
@@ -954,6 +947,7 @@ public class emit {
 
     /* action object initializer */
     out.println("  /** Action encapsulation object initializer. */");
+    out.println("  @Override");
     out.println("  protected void init_actions()");
     out.println("    {");
     /* TUM changes; proposed by Henning Niss 20050628: added typeArgument */
@@ -963,10 +957,11 @@ public class emit {
 
     /* access to action code */
     out.println("  /** Invoke a user supplied parse action. */");
+    out.println("  @Override");
     out.println("  public java_cup.runtime.Symbol do_action(");
     out.println("    int                        act_num,");
     out.println("    java_cup.runtime.lr_parser parser,");
-    out.println("    java.util.Stack<Symbol>    stack,");
+    out.println("    java.util.Stack<java_cup.runtime.Symbol>    stack,");
     out.println("    int                        top)");
     out.println("    throws java.lang.Exception");
     out.println("  {");
@@ -977,18 +972,22 @@ public class emit {
 
     /* method to tell the parser about the start state */
     out.println("  /** Indicates start state. */");
+    out.println("  @Override");
     out.println("  public int start_state() {return " + start_st + ";}");
 
     /* method to indicate start production */
     out.println("  /** Indicates start production. */");
+    out.println("  @Override");
     out.println("  public int start_production() {return " + start_production.index() + ";}");
     out.println();
 
     /* methods to indicate EOF and error symbol indexes */
     out.println("  /** <code>EOF</code> Symbol index. */");
+    out.println("  @Override");
     out.println("  public int EOF_sym() {return " + terminal.EOF.index() + ";}");
     out.println();
     out.println("  /** <code>error</code> Symbol index. */");
+    out.println("  @Override");
     out.println("  public int error_sym() {return " + terminal.error.index() + ";}");
     out.println();
 
@@ -1006,6 +1005,7 @@ public class emit {
     if (scan_code != null) {
       out.println();
       out.println("  /** Scan to get the next Symbol. */");
+      out.println("  @Override");
       out.println("  public java_cup.runtime.Symbol scan()");
       out.println("    throws java.lang.Exception");
       out.println("    {");
@@ -1070,7 +1070,7 @@ public class emit {
           + String.format("%08d", Integer.valueOf(instancecounter)) + "(");
       out.println("    int                        " + pre("act_num,"));
       out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
-      out.println("    java.util.Stack<Symbol>    " + pre("stack,"));
+      out.println("    java.util.Stack<java_cup.runtime.Symbol>    " + pre("stack,"));
       out.println("    int                        " + pre("top)"));
       out.println("    throws java.lang.Exception");
       out.println("    {");
@@ -1134,13 +1134,13 @@ public class emit {
         if (emit.lr_values()) {
           int loffset;
           String leftstring, rightstring;
-          rightstring = "((java_cup.runtime.Symbol)" + emit.pre("stack") + ".peek()" + ")";
+          rightstring = emit.pre("stack") + ".peek()";
           if (prod.rhs_length() == 0)
             leftstring = rightstring;
           else {
             loffset = prod.rhs_length() - 1;
-            leftstring = "((java_cup.runtime.Symbol)" + emit.pre("stack")
-                + ((loffset == 0) ? (".peek()") : (".elementAt(" + emit.pre("top") + "-" + loffset + ")")) + ")";
+            leftstring = emit.pre("stack")
+                + ((loffset == 0) ? (".peek()") : (".elementAt(" + emit.pre("top") + "-" + loffset + ")"));
           }
           out.println("              " + pre("result") + " = parser.getSymbolFactory().newSymbol(" + "\""
               + prod.lhs().the_symbol().name() + "\"," + prod.lhs().the_symbol().index() + ", " + leftstring + ", "
@@ -1181,7 +1181,7 @@ public class emit {
     out.println("  public final java_cup.runtime.Symbol " + pre("do_action") + "(");
     out.println("    int                        " + pre("act_num,"));
     out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
-    out.println("    java.util.Stack<Symbol>    " + pre("stack,"));
+    out.println("    java.util.Stack<java_cup.runtime.Symbol>    " + pre("stack,"));
     out.println("    int                        " + pre("top)"));
     out.println("    throws java.lang.Exception");
     out.println("    {");
