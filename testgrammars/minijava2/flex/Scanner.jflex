@@ -62,7 +62,7 @@ white_space = {new_line} | [ \t\f]
 
 <YYINITIAL>{
 /* keywords */
-"int"             { return symbol("int",TYPE, new Integer( INTTYPE ) ); }
+"int"             { return symbol("int",TYPE, Integer.valueOf( INTTYPE ) ); }
 "if"              { return symbol("if",IF); }
 "else"            { return symbol("else",ELSE); }
 "while"           { return symbol("while",WHILE); }
@@ -80,7 +80,7 @@ white_space = {new_line} | [ \t\f]
 {BoolLiteral} { return symbol("Boolconst",BOOLCONST, new Boolean(Boolean.parseBool(yytext()))); }
 
 /* literals */
-{IntLiteral} { return symbol("Intconst",INTCONST, new Integer(Integer.parseInt(yytext()))); }
+{IntLiteral} { return symbol("Intconst",INTCONST, Integer.valueOf(Integer.parseInt(yytext()))); }
 
 
 
@@ -93,19 +93,19 @@ white_space = {new_line} | [ \t\f]
 "{"               { return symbol("{",BEGIN); }
 "}"               { return symbol("}",END); }
 "="               { return symbol("=",ASSIGN); }
-"+"               { return symbol("plus",BINOP, new Integer( PLUS ) ); }
-"-"               { return symbol("minus",BINOP, new Integer( MINUS ) ); }
-"*"               { return symbol("mult",BINOP, new Integer( MULT ) ); }
-"/"               { return symbol("div",BINOP, new Integer( DIV ) ); }
-"%"               { return symbol("mod",BINOP, new Integer( MOD ) ); }
-"<="              { return symbol("leq",COMP,  new Integer( LEQ ) ); }
-">="              { return symbol("gtq",COMP,  new Integer( GTQ ) ); }
-"=="              { return symbol("eq",COMP,  new Integer( EQ  ) ); }
-"!="              { return symbol("neq",COMP,  new Integer( NEQ ) ); }
-"<"               { return symbol("le",COMP,  new Integer( LE  ) ); }
-">"               { return symbol("gt",COMP,  new Integer( GT  ) ); }
-"&&"              { return symbol("and",BBINOP,new Integer( AND ) ); }
-"||"              { return symbol("or",BBINOP,new Integer( OR  ) ); }
+"+"               { return symbol("plus",BINOP, Integer.valueOf( PLUS ) ); }
+"-"               { return symbol("minus",BINOP, Integer.valueOf( MINUS ) ); }
+"*"               { return symbol("mult",BINOP, Integer.valueOf( MULT ) ); }
+"/"               { return symbol("div",BINOP, Integer.valueOf( DIV ) ); }
+"%"               { return symbol("mod",BINOP, Integer.valueOf( MOD ) ); }
+"<="              { return symbol("leq",COMP,  Integer.valueOf( LEQ ) ); }
+">="              { return symbol("gtq",COMP,  Integer.valueOf( GTQ ) ); }
+"=="              { return symbol("eq",COMP,  Integer.valueOf( EQ  ) ); }
+"!="              { return symbol("neq",COMP,  Integer.valueOf( NEQ ) ); }
+"<"               { return symbol("le",COMP,  Integer.valueOf( LE  ) ); }
+">"               { return symbol("gt",COMP,  Integer.valueOf( GT  ) ); }
+"&&"              { return symbol("and",BBINOP,Integer.valueOf( AND ) ); }
+"||"              { return symbol("or",BBINOP,Integer.valueOf( OR  ) ); }
 "!"               { return symbol("not",BUNOP); }
 
 

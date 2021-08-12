@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "../../target/dist/java-cup-11b-runtime.jar"
+    ]
+}
