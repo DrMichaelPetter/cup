@@ -107,6 +107,16 @@ public class Symbol {
 
   public int left, right;
   public Object value;
+  /**
+   * Equivalent of just retrieving the value directly, but does the typecast here;
+   * Removes lots of unchecked cast warnings from the actual parser class by using this one function
+   * @param <T> the type of the value to be casted to
+   * @return just the value, like the attribute of the same name
+   */
+  @SuppressWarnings("unchecked")
+  public <T> T value() {
+    return (T) value;
+  }
 
   /*****************************
    * Printing this token out. (Override for pretty-print).

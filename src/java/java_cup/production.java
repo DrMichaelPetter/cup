@@ -414,29 +414,24 @@ public class production {
     /* Put in the left/right value labels */
     if (emit.lr_values()) {
       if (!emit.locations())
-        ret = "\t\tint " + labelname + "left = ((java_cup.runtime.Symbol)" + emit.pre("stack") +
+        ret = "\t\tint " + labelname + "left = (" + emit.pre("stack") +
         // TUM 20050917
             ((offset == 0) ? ".peek()" : (".elementAt(" + emit.pre("top") + "-" + offset + ")")) + ").left;\n"
-            + "\t\tint " + labelname + "right = ((java_cup.runtime.Symbol)" + emit.pre("stack") +
-            // TUM 20050917
+            + "\t\tint " + labelname + "right = (" + emit.pre("stack") +
             ((offset == 0) ? ".peek()" : (".elementAt(" + emit.pre("top") + "-" + offset + ")")) + ").right;\n";
       else
         ret = "\t\tLocation " + labelname + "xleft = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)"
             + emit.pre("stack") +
-            // TUM 20050917
             ((offset == 0) ? ".peek()" : (".elementAt(" + emit.pre("top") + "-" + offset + ")")) + ").xleft;\n"
             + "\t\tLocation " + labelname + "xright = ((java_cup.runtime.ComplexSymbolFactory.ComplexSymbol)"
             + emit.pre("stack") +
-            // TUM 20050917
             ((offset == 0) ? ".peek()" : (".elementAt(" + emit.pre("top") + "-" + offset + ")")) + ").xright;\n";
     } else
       ret = "";
 
     /* otherwise, just declare label. */
-    return ret + "\t\t" + stack_type + " " + labelname + " = (" + stack_type + ")((" + "java_cup.runtime.Symbol) "
-        + emit.pre("stack") +
-        // TUM 20050917
-        ((offset == 0) ? ".peek()" : (".elementAt(" + emit.pre("top") + "-" + offset + ")")) + ").value;\n";
+    return ret + "\t\t" + stack_type + " " + labelname + " = " + emit.pre("stack") +
+        ((offset == 0) ? ".peek()" : (".elementAt(" + emit.pre("top") + "-" + offset + ")")) + ".<"+stack_type+">value();\n";
 
   }
   /* . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . */

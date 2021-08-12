@@ -387,7 +387,6 @@ public class emit {
     /* class header */
     out.println();
     out.println("/** Cup generated class to encapsulate user supplied action code.*/");
-    out.println("@SuppressWarnings({\"rawtypes\", \"unchecked\", \"unused\"})");
     /* TUM changes; proposed by Henning Niss 20050628: added type arguement */
     out.println("class " + pre("actions") + typeArgument() + " {");
     /* user supplied code */
@@ -416,7 +415,7 @@ public class emit {
           + String.format("%08d", Integer.valueOf(instancecounter)) + "(");
       out.println("    int                        " + pre("act_num,"));
       out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
-      out.println("    java.util.Stack            " + pre("stack,"));
+      out.println("    java.util.Stack<Symbol>    " + pre("stack,"));
       out.println("    int                        " + pre("top)"));
       out.println("    throws java.lang.Exception");
       out.println("    {");
@@ -446,11 +445,8 @@ public class emit {
         if (prod instanceof action_production) {
           int lastResult = ((action_production) prod).getIndexOfIntermediateResult();
           if (lastResult != -1) {
-            result = "(" + prod.lhs().the_symbol().stack_type() + ") " + "((java_cup.runtime.Symbol) "
-                + emit.pre("stack") +
-                // TUM 20050917
-                ((lastResult == 1) ? ".peek()" : (".elementAt(" + emit.pre("top") + "-" + (lastResult - 1) + ")"))
-                + ").value";
+            result = emit.pre("stack") +((lastResult == 1) ? ".peek()" : (".elementAt(" + emit.pre("top") + "-" + (lastResult - 1) + ")"))
+                + ".<"+prod.lhs().the_symbol().stack_type()+">value()";
           }
         }
 
@@ -490,10 +486,9 @@ public class emit {
           // TUM 20060608: even when its null: who cares?
 
           // store the intermediate result into RESULT
-          out.println("                " + "RESULT = " + "(" + prod.lhs().the_symbol().stack_type() + ") "
-              + "((java_cup.runtime.Symbol) " + emit.pre("stack") +
-              // TUM 20050917
-              ((index == 0) ? ".peek()" : (".elementAt(" + emit.pre("top") + "-" + index + ")")) + ").value;");
+          out.println("                " + "RESULT = " + emit.pre("stack") +
+              ((index == 0) ? ".peek()" : (".elementAt(" + emit.pre("top") + "-" + index + ")")) + 
+              ".<"+prod.lhs().the_symbol().stack_type()+">value();");
           break;
         }
 
@@ -570,7 +565,7 @@ public class emit {
     out.println("  public final java_cup.runtime.Symbol " + pre("do_action") + "(");
     out.println("    int                        " + pre("act_num,"));
     out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
-    out.println("    java.util.Stack            " + pre("stack,"));
+    out.println("    java.util.Stack<Symbol>     " + pre("stack,"));
     out.println("    int                        " + pre("top)"));
     out.println("    throws java.lang.Exception");
     out.println("    {");
@@ -921,12 +916,12 @@ public class emit {
     out.println();
     out.println("/** " + version.title_str + " generated parser.");
     out.println("  */");
-    out.println("@SuppressWarnings({\"rawtypes\"})");
     /* TUM changes; proposed by Henning Niss 20050628: added typeArgument */
+    out.println("@SuppressWarnings(\"unused\")");
     out.println("public class " + parser_class_name + typeArgument() + " extends java_cup.runtime.lr_parser {");
 
     out.println();
-    out.println(" public final Class getSymbolContainer() {");
+    out.println(" public final Class<?> getSymbolContainer() {");
     out.println("    return " + symbol_const_class_name + ".class;");
     out.println("}");
 
@@ -971,7 +966,7 @@ public class emit {
     out.println("  public java_cup.runtime.Symbol do_action(");
     out.println("    int                        act_num,");
     out.println("    java_cup.runtime.lr_parser parser,");
-    out.println("    java.util.Stack            stack,");
+    out.println("    java.util.Stack<Symbol>    stack,");
     out.println("    int                        top)");
     out.println("    throws java.lang.Exception");
     out.println("  {");
@@ -1050,7 +1045,6 @@ public class emit {
     /* class header */
     out.println();
     out.println("/** Cup generated class to encapsulate user supplied action code.*/");
-    out.println("@SuppressWarnings({\"rawtypes\", \"unchecked\", \"unused\"})");
     out.println("class " + pre("actions") + typeArgument() + " {");
     /* user supplied code */
     if (action_code != null) {
@@ -1076,7 +1070,7 @@ public class emit {
           + String.format("%08d", Integer.valueOf(instancecounter)) + "(");
       out.println("    int                        " + pre("act_num,"));
       out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
-      out.println("    java.util.Stack            " + pre("stack,"));
+      out.println("    java.util.Stack<Symbol>    " + pre("stack,"));
       out.println("    int                        " + pre("top)"));
       out.println("    throws java.lang.Exception");
       out.println("    {");
@@ -1187,7 +1181,7 @@ public class emit {
     out.println("  public final java_cup.runtime.Symbol " + pre("do_action") + "(");
     out.println("    int                        " + pre("act_num,"));
     out.println("    java_cup.runtime.lr_parser " + pre("parser,"));
-    out.println("    java.util.Stack            " + pre("stack,"));
+    out.println("    java.util.Stack<Symbol>    " + pre("stack,"));
     out.println("    int                        " + pre("top)"));
     out.println("    throws java.lang.Exception");
     out.println("    {");
