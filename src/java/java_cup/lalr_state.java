@@ -239,7 +239,14 @@ public class lalr_state {
   }
 
   /* . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . */
-
+  private static lalr_state start_state;
+  private static lalr_item start_itm;
+  public static lalr_state startState(){
+    return start_state;
+  }
+  public static lalr_item startItem(){
+    return start_itm;
+  }
   /**
    * Build an LALR viable prefix recognition machine given a start production.
    * This method operates by first building a start state from the start
@@ -285,7 +292,6 @@ public class lalr_state {
    */
 
   public static lalr_state build_machine(production start_prod) throws internal_error {
-    lalr_state start_state;
     lalr_item_set start_items;
     lalr_item_set kernel;
     Stack<lalr_state> work_stack = new Stack<>();
@@ -298,7 +304,7 @@ public class lalr_state {
     /* build item with dot at front of start production and EOF lookahead */
     start_items = new lalr_item_set();
 
-    var start_itm = new lalr_item(start_prod);
+    start_itm = new lalr_item(start_prod);
     start_itm.lookahead().add(terminal.EOF);
 
     start_items.add(start_itm);

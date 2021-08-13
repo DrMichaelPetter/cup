@@ -58,6 +58,7 @@ public class terminal_set {
    * @param obj the object we are testing.
    */
   protected void not_null(Object obj) throws internal_error {
+    assert (obj!=null) : "Null object used in set operation";
     if (obj == null)
       throw new internal_error("Null object used in set operation");
   }

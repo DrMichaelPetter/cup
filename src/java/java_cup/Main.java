@@ -112,6 +112,12 @@ public class Main {
   /** User option -- number of conflicts to expect */
   protected static int expect_conflicts = 0;
 
+  public static boolean report_counterexamples = true;
+  
+  public static boolean report_cex_stats = false;
+  
+  public static boolean report_cex_stats_to_out = false;
+
   /* frankf added this 6/18/96 */
   /** User option -- should generator generate code for left/right values? */
   protected static boolean lr_values = true;

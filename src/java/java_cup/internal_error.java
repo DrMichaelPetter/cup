@@ -2,7 +2,7 @@
 package java_cup;
 
 /** Exception subclass for reporting internal errors in JavaCup. */
-public class internal_error extends Exception {
+public class internal_error extends Error {
   private static final long serialVersionUID = 6818094007368386287L;
 
   /** Constructor with a message */
